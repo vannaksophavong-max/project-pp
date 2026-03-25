@@ -1,5 +1,5 @@
 // api.js
-const API = 'http://localhost:8003/api/v1';
+const API = 'https://block-paradise-backend.onrender.com';
 
 export async function register(username, email, password) {
     const res = await fetch(`${API}/users`, {
