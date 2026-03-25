@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Block Paradise</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <div class="site">
+
+        <!-- HEADER -->
+
+        <div class="header">
+
+            <div class="left">
+                <div class="logo">
+                    <img src="logo.png">
+                </div>
+
+                <div class="welcome">
+                    Welcome to Block Paradise
+                </div>
+            </div>
+
+            <nav class="nav">
+                <a href="card.html">
+                    <div class="cart-btn" onclick="goCheckout()">Cart (0)</div>
+                </a>
+                <a href="#menu">Menu</a>
+                <a href="#">Location</a>
+                <a href="login.html">Log in</a>
+            </nav>
+
+        </div>
+
+        <!-- BANNERS -->
+
+        <section class="banners">
+
+            <div class="banner">
+                <img src="b.jpg">
+            </div>
+
+            <div class="banner">
+                <img src="block.jpg">
+            </div>
+
+        </section>
+
+        <h2 class="section-title">Our products</h2>
+
+        <h3 class="label" id="menu">Block paradise</h3>
+        <section class="products" id="blockList"></section>
+
+        <h3 class="label">Blind Box</h3>
+        <section class="products" id="blindList"></section>
+
+    </div>
+
+    <script src="blockparadise.js"></script>
+
+    <script type="module">
+        import { isLoggedIn, logout } from './api.js';
+
+        // Update nav: show username or "Log in"
+        const loginLink = document.querySelector('a[href="login.html"]');
+        if (isLoggedIn()) {
+            const name = localStorage.getItem('username');
+            loginLink.textContent = name + ' | Logout';
+            loginLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                logout();
+                window.location.reload();
+            });
+        }
+    </script>
+
+</body>
+
+</html>

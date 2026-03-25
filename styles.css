@@ -1,0 +1,60 @@
+*{box-sizing:border-box;font-family:Arial, Helvetica, sans-serif;}
+body{margin:0;background:#cfe9f6;}
+.site{min-height:100vh;width:100%;padding:24px 48px;}
+
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.left{display:flex;align-items:center;gap:12px;}
+
+.logo{width:72px;height:72px;background:white;border-radius:14px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.logo img{width:100%;height:100%;object-fit:contain;}
+
+.welcome{background:white;padding:8px 16px;border-radius:20px;font-size:14px;}
+
+.nav{display:flex;align-items:center;}
+
+.nav a, .cart-btn{
+text-decoration:none;
+font-size:14px;
+color:#333;
+margin-left:12px;
+padding:8px 16px;
+border-radius:20px;
+background:white;
+display:inline-block;
+transition:0.2s;
+}
+.nav a:hover, .cart-btn:hover{
+background:#f0f0f0;
+transform:translateY(-2px);
+box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+.cart-btn{
+background:white;
+padding:8px 14px;
+border-radius:20px;
+cursor:pointer;
+font-weight:bold;
+}
+
+
+.banners{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:26px;}
+.banner{height:160px;border-radius:20px;overflow:hidden;}
+.banner img{width:100%;height:100%;object-fit:cover;}
+
+.section-title{text-align:center;margin:30px 0 16px;font-size:22px;font-weight:bold;}
+.label{font-size:18px;margin:18px 0 12px;}
+
+.products{display:grid;grid-template-columns:repeat(6,1fr);gap:18px;}
+.card{background:white;border-radius:16px;padding:10px;text-align:center;cursor:pointer;transition:0.2s;}
+.card:hover{transform:translateY(-5px);box-shadow:0 8px 20px rgba(0,0,0,0.1);}
+
+.image{height:120px;border-radius:12px;overflow:hidden;margin-bottom:8px;}
+.image img{width:100%;height:100%;object-fit:cover;}
+
+.name{font-size:14px;margin-bottom:6px;}
+.price{background:#f2f2f2;border-radius:12px;font-size:13px;padding:4px 10px;display:inline-block;}
+
+@media(max-width:1200px){.products{grid-template-columns:repeat(4,1fr);}}
+@media(max-width:768px){.products{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:500px){.products{grid-template-columns:repeat(2,1fr);}}

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Checkout - Block Paradise</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#cfe9f6;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.container{
+  width:420px;
+  background:white;
+  padding:20px;
+  border-radius:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+h2{text-align:center;margin-bottom:10px;}
+
+.input{
+  width:100%;
+  padding:10px;
+  margin:8px 0;
+  border-radius:10px;
+  border:1px solid #ddd;
+}
+
+.total{
+  margin:10px 0;
+  font-weight:bold;
+}
+
+.qr{
+  text-align:center;
+  margin:15px 0;
+}
+
+.qr img{
+  width:150px;
+  height:150px;
+}
+
+.btn{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:20px;
+  background:#4CAF50;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.btn:hover{background:#45a049;}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Payment</h2>
+
+<div class="total">Total: $<span id="total">0</span></div>
+
+<!-- USER INFO -->
+<input class="input" id="username" placeholder="Your Name">
+<input class="input" id="phone" placeholder="Phone Number">
+<input class="input" id="address" placeholder="Address / Location">
+
+<!-- QR PAYMENT -->
+<div class="qr">
+  <p>Scan QR to pay</p>
+  <img src="qr.jpg" alt="QR Code">
+</div>
+
+<button class="btn" onclick="payNow()">Confirm Payment</button>
+
+</div>
+
+<script>
+
+let total = localStorage.getItem("total") || 0;
+document.getElementById("total").innerText = total;
+
+function payNow(){
+  const name = document.getElementById("username").value;
+  const phone = document.getElementById("phone").value;
+  const address = document.getElementById("address").value;
+
+  if(name === "" || phone === "" || address === ""){
+    alert("Please fill all information");
+    return;
+  }
+
+  alert("Payment Success!\n\nName: " + name + "\nPhone: " + phone + "\nAddress: " + address + "\nTotal: $" + total);
+}
+
+</script>
+
+</body>
+</html>
