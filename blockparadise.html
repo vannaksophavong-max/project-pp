@@ -67,17 +67,18 @@
     <script type="module">
         import { isLoggedIn, logout } from './api.js';
 
-        // Update nav: show username or "Log in"
-        const loginLink = document.querySelector('a[href="login.html"]');
-        if (isLoggedIn()) {
-            const name = localStorage.getItem('username');
-            loginLink.textContent = name + ' | Logout';
-            loginLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                logout();
-                window.location.href = 'login.html';
-            });
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginLink = document.querySelector('a[href="login.html"]');
+            if (isLoggedIn()) {
+                const name = localStorage.getItem('username');
+                loginLink.textContent = name + ' | Logout';
+                loginLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    logout();
+                    window.location.href = 'login.html';
+                });
+            }
+        });
     </script>
 
 </body>
