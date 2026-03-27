@@ -68,8 +68,16 @@
         import { isLoggedIn, logout } from './api.js';
 
         document.addEventListener('DOMContentLoaded', () => {
-            const loginLink = document.querySelector('a[href="login.html"]');
-            if (isLoggedIn()) {
+            // Find the login link by text instead of href
+            const links = document.querySelectorAll('a');
+            let loginLink;
+            links.forEach(a => {
+                if (a.textContent.trim() === 'Log in') {
+                    loginLink = a;
+                }
+            });
+
+            if (loginLink && isLoggedIn()) {
                 const name = localStorage.getItem('username');
                 loginLink.textContent = name + ' | Logout';
                 loginLink.addEventListener('click', (e) => {
