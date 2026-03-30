@@ -23,7 +23,7 @@ function goCheckout() {
 /* DATA */
 const blockProducts = [
 
-  { name: "FlowerBlock 1", price: 8, img: "FlowerBlock 1.jpg" },
+  { name: "Flower Block 1", price: 8, img: "Flower Block 1.jpg" },
   { name: "Flower Block 2", price: 8, img: "Flower Block 2.jpg" },
   { name: "Flower Block 3", price: 8, img: "Flower Block 3.jpg" },
   { name: "Flower Block 4", price: 8, img: "Flower Block 4.jpg" },
