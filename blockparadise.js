@@ -29,12 +29,6 @@ const blockProducts = [
   { name: "Flower Block 4", price: 8, img: "f4.jpg" },
   { name: "Flower Block 5", price: 9, img: "f5.jpg" },
   { name: "Flower Block 6", price: 9, img: "f6.jpg" },
-  { name: "Flower Block 7", price: 8, img: "f7.jpg" },
-  { name: "Flower Block 8", price: 8, img: "f8.jpg" },
-  { name: "Flower Block 9", price: 8, img: "f9.jpg" },
-  { name: "Flower Block 10", price: 8, img: "f10.jpg" },
-  { name: "Flower Block 11", price: 9, img: "f11.jpg" },
-  { name: "Flower Block 12", price: 9, img: "f12.jpg" }
 
 
 
