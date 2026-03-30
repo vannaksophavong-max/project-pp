@@ -23,12 +23,12 @@ function goCheckout() {
 /* DATA */
 const blockProducts = [
 
-  { name: "Flower Block 1", price: 8, img: "Flower Block 1.jpg" },
-  { name: "Flower Block 2", price: 8, img: "Flower Block 2.jpg" },
-  { name: "Flower Block 3", price: 8, img: "Flower Block 3.jpg" },
-  { name: "Flower Block 4", price: 8, img: "Flower Block 4.jpg" },
-  { name: "Flower Block 5", price: 9, img: "Flower Block 5.jpg" },
-  { name: "Flower Block 6", price: 9, img: "Flower Block 6.jpg" },
+  { name: "Flower Block 1", price: 8, img: "f1.jpg" },
+  { name: "Flower Block 2", price: 8, img: "f2.jpg" },
+  { name: "Flower Block 3", price: 8, img: "f3.jpg" },
+  { name: "Flower Block 4", price: 8, img: "f4.jpg" },
+  { name: "Flower Block 5", price: 9, img: "f5.jpg" },
+  { name: "Flower Block 6", price: 9, img: "f6.jpg" },
   { name: "Flower Block 7", price: 8, img: "f7.jpg" },
   { name: "Flower Block 8", price: 8, img: "f8.jpg" },
   { name: "Flower Block 9", price: 8, img: "f9.jpg" },
