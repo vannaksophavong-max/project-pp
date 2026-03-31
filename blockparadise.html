@@ -35,7 +35,8 @@
                 </a>
                 <a href="#menu">Shop</a>
                 <a href="https://maps.app.goo.gl/x3zyUQthMNTmc6cx5">Location</a>
-                <a href="login.html">Log in</a>
+                <a href="admin.html" id="adminLink" style="display:none">👑 Admin</a>
+                <a href="login.html" id="loginLink">Log in</a>
             </nav>
 
         </div>
@@ -70,23 +71,30 @@
         import { isLoggedIn, logout } from './api.js';
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Find the login link by text instead of href
-            const links = document.querySelectorAll('a');
-            let loginLink;
-            links.forEach(a => {
-                if (a.textContent.trim() === 'Log in') {
-                    loginLink = a;
-                }
-            });
+            const loginLink = document.getElementById('loginLink');
+            const adminLink = document.getElementById('adminLink');
 
-            if (loginLink && isLoggedIn()) {
+            if (isLoggedIn()) {
                 const name = localStorage.getItem('username');
-                loginLink.textContent = name + ' | Logout';
-                loginLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    logout();
-                    window.location.href = 'login.html';
-                });
+                const isAdmin = (() => {
+                    try {
+                        const payload = JSON.parse(atob(localStorage.getItem('token').split('.')[1]));
+                        return payload.isAdmin === true;
+                    } catch { return false; }
+                })();
+
+                if (loginLink) {
+                    loginLink.textContent = name + ' | Logout';
+                    loginLink.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        logout();
+                        window.location.href = 'login.html';
+                    });
+                }
+
+                if (adminLink && isAdmin) {
+                    adminLink.style.display = 'inline-block';
+                }
             }
         });
     </script>

@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard – Block Paradise</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ── layout ── */
+    .admin-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 110px 24px 40px;
+    }
+
+    .page-title {
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 24px;
+    }
+
+    /* ── stat cards ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 18px;
+      padding: 20px 24px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.07);
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: #777;
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    /* ── toolbar ── */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+      padding: 10px 16px;
+      border-radius: 20px;
+      border: none;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      font-size: 14px;
+      outline: none;
+    }
+
+    /* ── table ── */
+    .table-wrap {
+      background: white;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.07);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    thead {
+      background: #cfe9f6;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    th {
+      font-weight: 600;
+      font-size: 13px;
+      color: #555;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: #f9fdff;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-admin {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .badge-user {
+      background: #f0f0f0;
+      color: #555;
+    }
+
+    /* ── action buttons ── */
+    .action-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-edit, .btn-delete {
+      padding: 5px 12px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: 0.15s;
+    }
+
+    .btn-edit {
+      background: #e0f0ff;
+      color: #0369a1;
+    }
+
+    .btn-edit:hover {
+      background: #bae0ff;
+    }
+
+    .btn-delete {
+      background: #ffe4e4;
+      color: #dc2626;
+    }
+
+    .btn-delete:hover {
+      background: #ffc9c9;
+    }
+
+    /* ── pagination ── */
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .pg-btn {
+      padding: 7px 18px;
+      border: none;
+      border-radius: 20px;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: 0.15s;
+    }
+
+    .pg-btn:hover:not(:disabled) {
+      background: #e0f0ff;
+    }
+
+    .pg-btn:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+
+    .pg-info {
+      font-size: 13px;
+      color: #666;
+    }
+
+    /* ── modal overlay ── */
+    .modal-bg {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-bg.open {
+      display: flex;
+    }
+
+    .modal {
+      background: #e0e5ec;
+      padding: 28px;
+      border-radius: 20px;
+      box-shadow: 10px 10px 30px #c2c8d0, -10px -10px 30px #ffffff;
+      width: 320px;
+    }
+
+    .modal h3 {
+      margin: 0 0 18px;
+      font-size: 18px;
+    }
+
+    .modal input,
+    .modal select {
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      border-radius: 10px;
+      border: none;
+      background: #e0e5ec;
+      box-shadow: inset 4px 4px 6px #c8ccd1, inset -4px -4px 6px #f0f5fa;
+      font-size: 14px;
+      box-sizing: border-box;
+      outline: none;
+    }
+
+    .modal-btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .modal-btns button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+
+    .btn-save {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .btn-save:hover {
+      background: #43a047;
+    }
+
+    .btn-cancel {
+      background: #e0e5ec;
+      box-shadow: 4px 4px 8px #c2c8d0, -4px -4px 8px #ffffff;
+    }
+
+    /* ── loading / empty ── */
+    .loading, .empty {
+      text-align: center;
+      padding: 40px;
+      color: #888;
+      font-size: 14px;
+    }
+
+    /* ── toast ── */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: #333;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 3000;
+      pointer-events: none;
+    }
+
+    #toast.show {
+      opacity: 1;
+    }
+
+    @media (max-width: 700px) {
+      .stats { grid-template-columns: 1fr 1fr; }
+      td:nth-child(4), th:nth-child(4) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="site">
+
+  <!-- HEADER (same as blockparadise) -->
+  <div class="header">
+    <div class="left">
+      <div class="logo">
+        <img src="logo.png" alt="Logo" />
+      </div>
+      <div class="welcome">Admin Dashboard</div>
+    </div>
+    <nav class="nav">
+      <a href="blockparadise.html">🏠 Shop</a>
+      <a href="#" id="logoutLink">Logout</a>
+    </nav>
+  </div>
+
+  <!-- MAIN -->
+  <div class="admin-wrap">
+    <div class="page-title">👑 Admin Dashboard</div>
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-label">Total Users</div>
+        <div class="stat-value" id="statTotal">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">New This Week</div>
+        <div class="stat-value" id="statWeek">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Admins</div>
+        <div class="stat-value" id="statAdmins">—</div>
+      </div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <input class="search-box" id="searchBox" placeholder="🔍  Search by name or email…" />
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Joined</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="userTableBody">
+          <tr><td colspan="5" class="loading">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="pagination">
+      <button class="pg-btn" id="prevBtn" disabled>← Prev</button>
+      <span class="pg-info" id="pgInfo"></span>
+      <button class="pg-btn" id="nextBtn" disabled>Next →</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-bg" id="editModal">
+  <div class="modal">
+    <h3>Edit User</h3>
+    <input type="text"  id="editUsername" placeholder="Username" />
+    <input type="email" id="editEmail"    placeholder="Email" />
+    <select id="editRole">
+      <option value="false">User</option>
+      <option value="true">Admin</option>
+    </select>
+    <input type="password" id="editPassword" placeholder="New password (optional)" />
+    <div class="modal-btns">
+      <button class="btn-cancel" id="cancelEdit">Cancel</button>
+      <button class="btn-save"   id="saveEdit">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script type="module">
+  import { logout } from './api.js';
+
+  const API = 'https://block-paradise-backend.onrender.com/api/v1';
+  const token = () => localStorage.getItem('token');
+
+  // ── Guard: redirect if not logged in ──────────────────────────────────
+  if (!token()) {
+    window.location.href = 'login.html';
+  }
+
+  // ── Toast ──────────────────────────────────────────────────────────────
+  function toast(msg, duration = 2800) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), duration);
+  }
+
+  // ── Auth header ────────────────────────────────────────────────────────
+  function authHeaders() {
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token()}`
+    };
+  }
+
+  // ── Logout ─────────────────────────────────────────────────────────────
+  document.getElementById('logoutLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    logout();
+    window.location.href = 'login.html';
+  });
+
+  // ── State ──────────────────────────────────────────────────────────────
+  let currentPage = 1;
+  let totalPages  = 1;
+  let searchTimer = null;
+  let editingId   = null;
+
+  // ── Load stats ─────────────────────────────────────────────────────────
+  async function loadStats() {
+    try {
+      const res  = await fetch(`${API}/admin/stats`, { headers: authHeaders() });
+      if (res.status === 403) { noAdmin(); return; }
+      const data = await res.json();
+      document.getElementById('statTotal').textContent  = data.totalUsers       ?? '—';
+      document.getElementById('statWeek').textContent   = data.newUsersThisWeek ?? '—';
+      document.getElementById('statAdmins').textContent = data.adminCount       ?? '—';
+    } catch {
+      toast('⚠️ Could not load stats');
+    }
+  }
+
+  // ── Load users ─────────────────────────────────────────────────────────
+  async function loadUsers(page = 1) {
+    const search = document.getElementById('searchBox').value.trim();
+    const url    = `${API}/admin/users?page=${page}&limit=10&search=${encodeURIComponent(search)}`;
+    const tbody  = document.getElementById('userTableBody');
+    tbody.innerHTML = '<tr><td colspan="5" class="loading">Loading…</td></tr>';
+
+    try {
+      const res  = await fetch(url, { headers: authHeaders() });
+      if (res.status === 403) { noAdmin(); return; }
+      const data = await res.json();
+
+      currentPage = data.pagination.page;
+      totalPages  = data.pagination.totalPages || 1;
+
+      document.getElementById('pgInfo').textContent =
+        `Page ${currentPage} of ${totalPages}  (${data.pagination.total} users)`;
+      document.getElementById('prevBtn').disabled = currentPage <= 1;
+      document.getElementById('nextBtn').disabled = currentPage >= totalPages;
+
+      if (!data.users || data.users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty">No users found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = data.users.map(u => `
+        <tr>
+          <td>${esc(u.username)}</td>
+          <td>${esc(u.email)}</td>
+          <td><span class="badge ${u.is_admin ? 'badge-admin' : 'badge-user'}">
+            ${u.is_admin ? 'Admin' : 'User'}
+          </span></td>
+          <td>${new Date(u.created_at).toLocaleDateString()}</td>
+          <td>
+            <div class="action-row">
+              <button class="btn-edit"   onclick="openEdit('${u.id}','${esc(u.username)}','${esc(u.email)}',${u.is_admin})">Edit</button>
+              <button class="btn-delete" onclick="deleteUser('${u.id}','${esc(u.username)}')">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    } catch {
+      tbody.innerHTML = '<tr><td colspan="5" class="empty">Failed to load users.</td></tr>';
+    }
+  }
+
+  function noAdmin() {
+    document.body.innerHTML = `
+      <div style="display:flex;height:100vh;align-items:center;justify-content:center;font-family:Arial">
+        <div style="text-align:center">
+          <div style="font-size:48px">🔒</div>
+          <h2>Admin access required</h2>
+          <p>Your account does not have admin privileges.</p>
+          <a href="blockparadise.html" style="color:#0369a1">← Back to shop</a>
+        </div>
+      </div>`;
+  }
+
+  // ── Escape HTML ────────────────────────────────────────────────────────
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, c =>
+      ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+  }
+
+  // ── Edit modal ─────────────────────────────────────────────────────────
+  window.openEdit = function(id, username, email, isAdmin) {
+    editingId = id;
+    document.getElementById('editUsername').value = username;
+    document.getElementById('editEmail').value    = email;
+    document.getElementById('editRole').value     = String(isAdmin);
+    document.getElementById('editPassword').value = '';
+    document.getElementById('editModal').classList.add('open');
+  };
+
+  document.getElementById('cancelEdit').addEventListener('click', () => {
+    document.getElementById('editModal').classList.remove('open');
+  });
+
+  document.getElementById('saveEdit').addEventListener('click', async () => {
+    const body = {
+      username: document.getElementById('editUsername').value.trim(),
+      email:    document.getElementById('editEmail').value.trim(),
+      isAdmin:  document.getElementById('editRole').value === 'true',
+    };
+    const pw = document.getElementById('editPassword').value;
+
+    try {
+      // Update user info
+      const res = await fetch(`${API}/admin/users/${editingId}`, {
+        method:  'PATCH',
+        headers: authHeaders(),
+        body:    JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (!res.ok) { toast('❌ ' + (data.message || 'Update failed')); return; }
+
+      // Optionally reset password
+      if (pw) {
+        const pr = await fetch(`${API}/admin/users/${editingId}/reset-password`, {
+          method:  'PATCH',
+          headers: authHeaders(),
+          body:    JSON.stringify({ newPassword: pw }),
+        });
+        if (!pr.ok) { toast('⚠️ Info saved but password reset failed'); }
+      }
+
+      document.getElementById('editModal').classList.remove('open');
+      toast('✅ User updated');
+      loadUsers(currentPage);
+      loadStats();
+    } catch {
+      toast('❌ Network error');
+    }
+  });
+
+  // ── Delete ─────────────────────────────────────────────────────────────
+  window.deleteUser = async function(id, username) {
+    if (!confirm(`Delete user "${username}"? This cannot be undone.`)) return;
+    try {
+      const res  = await fetch(`${API}/admin/users/${id}`, {
+        method: 'DELETE', headers: authHeaders()
+      });
+      const data = await res.json();
+      if (!res.ok) { toast('❌ ' + (data.message || 'Delete failed')); return; }
+      toast('🗑️ User deleted');
+      loadUsers(currentPage);
+      loadStats();
+    } catch {
+      toast('❌ Network error');
+    }
+  };
+
+  // ── Pagination ─────────────────────────────────────────────────────────
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    if (currentPage > 1) loadUsers(currentPage - 1);
+  });
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    if (currentPage < totalPages) loadUsers(currentPage + 1);
+  });
+
+  // ── Search (debounced) ─────────────────────────────────────────────────
+  document.getElementById('searchBox').addEventListener('input', () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => loadUsers(1), 380);
+  });
+
+  // ── Init ───────────────────────────────────────────────────────────────
+  loadStats();
+  loadUsers(1);
+</script>
+
+</body>
+</html>
