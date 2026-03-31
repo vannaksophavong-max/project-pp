@@ -40,14 +40,9 @@ const blindProducts = [
   { name: "Blind Box 2", price: 12, img: "bb2.jpg" },
   { name: "Blind Box 3", price: 8, img: "bb3.jpg" },
   { name: "Blind Box 4", price: 8, img: "bb4.jpg" },
-  { name: "Blind Box 5", price: 12, img: "bb5.jpg" },
+  { name: "Blind Box 5", price: 12, img: "bb5.png" },
   { name: "Blind Box 6", price: 12, img: "bb6.jpg" },
-  { name: "Blind Box 7", price: 8, img: "bb7.jpg" },
-  { name: "Blind Box 8", price: 8, img: "bb8.jpg" },
-  { name: "Blind Box 9", price: 12, img: "bb9.jpg" },
-  { name: "Blind Box 10", price: 12, img: "bb10.jpg" },
-  { name: "Blind Box 11", price: 8, img: "bb11.jpg" },
-  { name: "Blind Box 12", price: 8, img: "bb12.jpg" }
+
 
 
 ];
