@@ -1,111 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>Checkout - Block Paradise</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Checkout - Block Paradise</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: #cfe9f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
 
-<style>
-body{
-  margin:0;
-  font-family:Arial;
-  background:#cfe9f6;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-}
+    .container {
+      width: 420px;
+      background: white;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
 
-.container{
-  width:420px;
-  background:white;
-  padding:20px;
-  border-radius:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.1);
-}
+    h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
 
-h2{text-align:center;margin-bottom:10px;}
+    /* ── CART LIST ── */
+    .cart-list {
+      margin-bottom: 14px;
+    }
 
-.input{
-  width:100%;
-  padding:10px;
-  margin:8px 0;
-  border-radius:10px;
-  border:1px solid #ddd;
-}
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+    }
 
-.total{
-  margin:10px 0;
-  font-weight:bold;
-}
+    .cart-item img {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #eee;
+    }
 
-.qr{
-  text-align:center;
-  margin:15px 0;
-}
+    .cart-item-info {
+      flex: 1;
+    }
 
-.qr img{
-  width:150px;
-  height:150px;
-}
+    .cart-item-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
 
-.btn{
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:20px;
-  background:#4CAF50;
-  color:white;
-  font-size:16px;
-  cursor:pointer;
-}
+    .cart-item-price {
+      font-size: 12px;
+      color: #4CAF50;
+      font-weight: 700;
+    }
 
-.btn:hover{background:#45a049;}
-</style>
+    .cart-item-del {
+      background: none;
+      border: none;
+      color: #ff5f5f;
+      font-size: 20px;
+      cursor: pointer;
+      transition: 0.2s;
+      padding: 0 4px;
+    }
+
+    .cart-item-del:hover {
+      transform: scale(1.2);
+    }
+
+    .cart-empty {
+      text-align: center;
+      color: #aaa;
+      font-size: 14px;
+      padding: 16px 0;
+    }
+
+    .input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      box-sizing: border-box;
+    }
+
+    .total {
+      margin: 10px 0;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .qr {
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .qr img {
+      width: 150px;
+      height: 150px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 20px;
+      background: #4CAF50;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #45a049;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #eee;
+      margin: 14px 0;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="container">
+  <div class="container">
+    <h2>🛒 Checkout</h2>
 
-<h2>Payment</h2>
+    <!-- CART LIST -->
+    <div class="cart-list" id="cartList"></div>
 
-<div class="total">Total: $<span id="total">0</span></div>
+    <hr class="divider">
 
-<!-- USER INFO -->
-<input class="input" id="username" placeholder="Your Name">
-<input class="input" id="phone" placeholder="Phone Number">
-<input class="input" id="address" placeholder="Address / Location">
+    <div class="total">Total: $<span id="total">0</span></div>
 
-<!-- QR PAYMENT -->
-<div class="qr">
-  <p>Scan QR to pay</p>
-  <img src="qr.jpg" alt="QR Code">
-</div>
+    <!-- USER INFO -->
+    <input class="input" id="username" placeholder="Your Name">
+    <input class="input" id="phone" placeholder="Phone Number">
+    <input class="input" id="address" placeholder="Address / Location">
 
-<button class="btn" onclick="payNow()">Confirm Payment</button>
+    <!-- QR PAYMENT -->
+    <div class="qr">
+      <p>Scan QR to pay</p>
+      <img src="qr.jpg" alt="QR Code">
+    </div>
 
-</div>
+    <button class="btn" onclick="payNow()">Confirm Payment</button>
+  </div>
 
-<script>
+  <script>
+    // ── LOAD CART ──────────────────────────────────────
+    let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
-let total = localStorage.getItem("total") || 0;
-document.getElementById("total").innerText = total;
+    function renderCart() {
+      const list = document.getElementById("cartList");
+      const total = cart.reduce((s, i) => s + i.price, 0);
 
-function payNow(){
-  const name = document.getElementById("username").value;
-  const phone = document.getElementById("phone").value;
-  const address = document.getElementById("address").value;
+      list.innerHTML = "";
 
-  if(name === "" || phone === "" || address === ""){
-    alert("Please fill all information");
-    return;
-  }
+      if (cart.length === 0) {
+        list.innerHTML = '<div class="cart-empty"> Cart ទទេ</div>';
+        document.getElementById("total").innerText = "0";
+        return;
+      }
 
-  alert("Payment Success!\n\nName: " + name + "\nPhone: " + phone + "\nAddress: " + address + "\nTotal: $" + total);
-}
+      cart.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `
+      <img src="${item.img}" onerror="this.style.background='#eee'">
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">$${item.price}</div>
+      </div>
+      <button class="cart-item-del" onclick="deleteItem(${index})">🗑</button>
+    `;
+        list.appendChild(div);
+      });
 
-</script>
+      document.getElementById("total").innerText = total.toFixed(2);
+      localStorage.setItem("total", total.toFixed(2));
+    }
 
+    // ── DELETE ITEM ────────────────────────────────────
+    function deleteItem(index) {
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    // ── PAY NOW ────────────────────────────────────────
+    function payNow() {
+      const name = document.getElementById("username").value;
+      const phone = document.getElementById("phone").value;
+      const address = document.getElementById("address").value;
+      const total = document.getElementById("total").innerText;
+
+      if (cart.length === 0) { alert("Cart ទទេ!"); return; }
+      if (!name || !phone || !address) { alert("Please fill all information"); return; }
+
+      alert("Payment Success!\n\nName: " + name + "\nPhone: " + phone + "\nAddress: " + address + "\nTotal: $" + total);
+
+      // clear cart after payment
+      cart = [];
+      localStorage.removeItem("cart");
+      localStorage.removeItem("total");
+      renderCart();
+    }
+
+    renderCart();
+  </script>
 </body>
+
 </html>
