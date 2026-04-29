@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -23,7 +24,7 @@
       top: 72px;
       bottom: 0;
       padding: 20px 0;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
       z-index: 100;
     }
 
@@ -100,7 +101,7 @@
       background: white;
       border-radius: 18px;
       padding: 20px 24px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.07);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
     }
 
     .stat-label {
@@ -140,7 +141,7 @@
       border-radius: 20px;
       border: none;
       background: white;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
       font-size: 14px;
       outline: none;
     }
@@ -150,7 +151,7 @@
       border-radius: 20px;
       border: none;
       background: white;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
       font-size: 14px;
       outline: none;
       cursor: pointer;
@@ -177,7 +178,7 @@
       background: white;
       border-radius: 18px;
       overflow: hidden;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.07);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
     }
 
     table {
@@ -190,7 +191,8 @@
       background: #cfe9f6;
     }
 
-    th, td {
+    th,
+    td {
       padding: 12px 16px;
       text-align: left;
       border-bottom: 1px solid #f0f0f0;
@@ -277,7 +279,8 @@
       gap: 6px;
     }
 
-    .btn-edit, .btn-delete {
+    .btn-edit,
+    .btn-delete {
       padding: 5px 12px;
       border: none;
       border-radius: 10px;
@@ -319,7 +322,7 @@
       border: none;
       border-radius: 20px;
       background: white;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
       cursor: pointer;
       font-size: 13px;
       font-weight: 600;
@@ -345,7 +348,7 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.35);
+      background: rgba(0, 0, 0, 0.35);
       z-index: 2000;
       justify-content: center;
       align-items: center;
@@ -432,7 +435,8 @@
     }
 
     /* ── loading / empty ── */
-    .loading, .empty {
+    .loading,
+    .empty {
       text-align: center;
       padding: 40px;
       color: #888;
@@ -460,305 +464,326 @@
     }
 
     @media (max-width: 1100px) {
-      .stats { grid-template-columns: repeat(2, 1fr); }
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
 
     @media (max-width: 700px) {
-      .sidebar { display: none; }
-      .main-content { margin-left: 0; }
-      .stats { grid-template-columns: 1fr 1fr; }
-      td:nth-child(4), th:nth-child(4) { display: none; }
+      .sidebar {
+        display: none;
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      td:nth-child(4),
+      th:nth-child(4) {
+        display: none;
+      }
     }
   </style>
 </head>
+
 <body>
 
-<div class="site">
+  <div class="site">
 
-  <!-- HEADER -->
-  <div class="header">
-    <div class="left">
-      <div class="logo">
-        <img src="logo.png" alt="Logo" />
+    <!-- HEADER -->
+    <div class="header">
+      <div class="left">
+        <div class="logo">
+          <img src="logo.png" alt="Logo" />
+        </div>
+        <div class="welcome">Admin Dashboard</div>
       </div>
-      <div class="welcome">Admin Dashboard</div>
+      <nav class="nav">
+        <a href="blockparadise.html">🏠 Shop</a>
+        <a href="#" id="logoutLink">Logout</a>
+      </nav>
     </div>
-    <nav class="nav">
-      <a href="blockparadise.html">🏠 Shop</a>
-      <a href="#" id="logoutLink">Logout</a>
-    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <div class="admin-container">
+
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-label">Dashboard</div>
+          <a class="sidebar-link active" data-tab="users">👥 Users</a>
+          <a class="sidebar-link" data-tab="products">📦 Products</a>
+          <a class="sidebar-link" data-tab="payments">💳 Payments</a>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-label">System</div>
+          <a class="sidebar-link" href="blockparadise.html">🏠 Shop</a>
+          <a class="sidebar-link danger" id="sidebarLogout">🚪 Logout</a>
+        </div>
+      </div>
+
+      <!-- MAIN CONTENT -->
+      <div class="main-content">
+        <div class="page-title">👑 Admin Dashboard</div>
+
+        <!-- STATS -->
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-label">Total Users</div>
+            <div class="stat-value" id="statTotalUsers">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">New This Week</div>
+            <div class="stat-value" id="statNewUsers">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Admins</div>
+            <div class="stat-value" id="statAdmins">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total Products</div>
+            <div class="stat-value" id="statProducts">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total Revenue</div>
+            <div class="stat-value" id="statRevenue">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Pending Payments</div>
+            <div class="stat-value" id="statPending">—</div>
+          </div>
+        </div>
+
+        <!-- USERS TAB -->
+        <div class="tab-content active" id="tab-users">
+          <div class="toolbar">
+            <input class="search-box" id="userSearch" placeholder="🔍  Search by name or email…" />
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Joined</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="userTableBody">
+                <tr>
+                  <td colspan="5" class="loading">Loading…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <button class="pg-btn" id="userPrevBtn" disabled>← Prev</button>
+            <span class="pg-info" id="userPgInfo"></span>
+            <button class="pg-btn" id="userNextBtn" disabled>Next →</button>
+          </div>
+        </div>
+
+        <!-- PRODUCTS TAB -->
+        <div class="tab-content" id="tab-products">
+          <div class="toolbar">
+            <input class="search-box" id="productSearch" placeholder="🔍  Search products…" />
+            <select class="filter-select" id="productCategoryFilter">
+              <option value="">All Categories</option>
+            </select>
+            <select class="filter-select" id="productActiveFilter">
+              <option value="">All Status</option>
+              <option value="true">Active Only</option>
+              <option value="false">Inactive Only</option>
+            </select>
+            <button class="btn-add" id="addProductBtn">+ Add Product</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Stock</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="productTableBody">
+                <tr>
+                  <td colspan="7" class="loading">Loading…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <button class="pg-btn" id="productPrevBtn" disabled>← Prev</button>
+            <span class="pg-info" id="productPgInfo"></span>
+            <button class="pg-btn" id="productNextBtn" disabled>Next →</button>
+          </div>
+        </div>
+
+        <!-- PAYMENTS TAB -->
+        <div class="tab-content" id="tab-payments">
+          <div class="toolbar">
+            <select class="filter-select" id="paymentStatusFilter">
+              <option value="">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="completed">Completed</option>
+              <option value="failed">Failed</option>
+              <option value="refunded">Refunded</option>
+            </select>
+            <input class="search-box" id="paymentUserSearch" placeholder="🔍  Search by user ID…" />
+            <button class="btn-add" id="addPaymentBtn">+ Add Payment</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Reference</th>
+                  <th>User</th>
+                  <th>Product</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Method</th>
+                  <th>Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="paymentTableBody">
+                <tr>
+                  <td colspan="8" class="loading">Loading…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <button class="pg-btn" id="paymentPrevBtn" disabled>← Prev</button>
+            <span class="pg-info" id="paymentPgInfo"></span>
+            <button class="pg-btn" id="paymentNextBtn" disabled>Next →</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 
-  <!-- MAIN CONTAINER -->
-  <div class="admin-container">
-    
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-      <div class="sidebar-section">
-        <div class="sidebar-label">Dashboard</div>
-        <a class="sidebar-link active" data-tab="users">👥 Users</a>
-        <a class="sidebar-link" data-tab="products">📦 Products</a>
-        <a class="sidebar-link" data-tab="payments">💳 Payments</a>
+  <!-- USER EDIT MODAL -->
+  <div class="modal-bg" id="userEditModal">
+    <div class="modal">
+      <h3>Edit User</h3>
+      <label>Username</label>
+      <input type="text" id="editUsername" placeholder="Username" />
+      <label>Email</label>
+      <input type="email" id="editEmail" placeholder="Email" />
+      <label>Role</label>
+      <select id="editRole">
+        <option value="false">User</option>
+        <option value="true">Admin</option>
+      </select>
+      <label>New Password (optional)</label>
+      <input type="password" id="editPassword" placeholder="New password" />
+      <div class="modal-btns">
+        <button class="btn-cancel" id="cancelUserEdit">Cancel</button>
+        <button class="btn-save" id="saveUserEdit">Save</button>
       </div>
-      <div class="sidebar-section">
-        <div class="sidebar-label">System</div>
-        <a class="sidebar-link" href="blockparadise.html">🏠 Shop</a>
-        <a class="sidebar-link danger" id="sidebarLogout">🚪 Logout</a>
-      </div>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div class="main-content">
-      <div class="page-title">👑 Admin Dashboard</div>
-
-      <!-- STATS -->
-      <div class="stats">
-        <div class="stat-card">
-          <div class="stat-label">Total Users</div>
-          <div class="stat-value" id="statTotalUsers">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">New This Week</div>
-          <div class="stat-value" id="statNewUsers">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Admins</div>
-          <div class="stat-value" id="statAdmins">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Total Products</div>
-          <div class="stat-value" id="statProducts">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Total Revenue</div>
-          <div class="stat-value" id="statRevenue">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Pending Payments</div>
-          <div class="stat-value" id="statPending">—</div>
-        </div>
-      </div>
-
-      <!-- USERS TAB -->
-      <div class="tab-content active" id="tab-users">
-        <div class="toolbar">
-          <input class="search-box" id="userSearch" placeholder="🔍  Search by name or email…" />
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Joined</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="userTableBody">
-              <tr><td colspan="5" class="loading">Loading…</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="pagination">
-          <button class="pg-btn" id="userPrevBtn" disabled>← Prev</button>
-          <span class="pg-info" id="userPgInfo"></span>
-          <button class="pg-btn" id="userNextBtn" disabled>Next →</button>
-        </div>
-      </div>
-
-      <!-- PRODUCTS TAB -->
-      <div class="tab-content" id="tab-products">
-        <div class="toolbar">
-          <input class="search-box" id="productSearch" placeholder="🔍  Search products…" />
-          <select class="filter-select" id="productCategoryFilter">
-            <option value="">All Categories</option>
-          </select>
-          <select class="filter-select" id="productActiveFilter">
-            <option value="">All Status</option>
-            <option value="true">Active Only</option>
-            <option value="false">Inactive Only</option>
-          </select>
-          <button class="btn-add" id="addProductBtn">+ Add Product</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="productTableBody">
-              <tr><td colspan="7" class="loading">Loading…</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="pagination">
-          <button class="pg-btn" id="productPrevBtn" disabled>← Prev</button>
-          <span class="pg-info" id="productPgInfo"></span>
-          <button class="pg-btn" id="productNextBtn" disabled>Next →</button>
-        </div>
-      </div>
-
-      <!-- PAYMENTS TAB -->
-      <div class="tab-content" id="tab-payments">
-        <div class="toolbar">
-          <select class="filter-select" id="paymentStatusFilter">
-            <option value="">All Status</option>
-            <option value="pending">Pending</option>
-            <option value="completed">Completed</option>
-            <option value="failed">Failed</option>
-            <option value="refunded">Refunded</option>
-          </select>
-          <input class="search-box" id="paymentUserSearch" placeholder="🔍  Search by user ID…" />
-          <button class="btn-add" id="addPaymentBtn">+ Add Payment</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Reference</th>
-                <th>User</th>
-                <th>Product</th>
-                <th>Amount</th>
-                <th>Status</th>
-                <th>Method</th>
-                <th>Date</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="paymentTableBody">
-              <tr><td colspan="8" class="loading">Loading…</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="pagination">
-          <button class="pg-btn" id="paymentPrevBtn" disabled>← Prev</button>
-          <span class="pg-info" id="paymentPgInfo"></span>
-          <button class="pg-btn" id="paymentNextBtn" disabled>Next →</button>
-        </div>
-      </div>
-
     </div>
   </div>
 
-</div>
-
-<!-- USER EDIT MODAL -->
-<div class="modal-bg" id="userEditModal">
-  <div class="modal">
-    <h3>Edit User</h3>
-    <label>Username</label>
-    <input type="text" id="editUsername" placeholder="Username" />
-    <label>Email</label>
-    <input type="email" id="editEmail" placeholder="Email" />
-    <label>Role</label>
-    <select id="editRole">
-      <option value="false">User</option>
-      <option value="true">Admin</option>
-    </select>
-    <label>New Password (optional)</label>
-    <input type="password" id="editPassword" placeholder="New password" />
-    <div class="modal-btns">
-      <button class="btn-cancel" id="cancelUserEdit">Cancel</button>
-      <button class="btn-save" id="saveUserEdit">Save</button>
+  <!-- PRODUCT MODAL -->
+  <div class="modal-bg" id="productModal">
+    <div class="modal">
+      <h3 id="productModalTitle">Add Product</h3>
+      <label>Name *</label>
+      <input type="text" id="productName" placeholder="Product name" />
+      <label>Price *</label>
+      <input type="number" id="productPrice" placeholder="0.00" step="0.01" min="0" />
+      <label>Stock</label>
+      <input type="number" id="productStock" placeholder="0" min="0" />
+      <label>Category</label>
+      <input type="text" id="productCategory" placeholder="Category" />
+      <label>Description</label>
+      <textarea id="productDesc" placeholder="Product description"></textarea>
+      <label>Image URL</label>
+      <input type="url" id="productImage" placeholder="https://..." />
+      <label>Status</label>
+      <select id="productStatus">
+        <option value="true">Active</option>
+        <option value="false">Inactive</option>
+      </select>
+      <div class="modal-btns">
+        <button class="btn-cancel" id="cancelProduct">Cancel</button>
+        <button class="btn-save" id="saveProduct">Save</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- PRODUCT MODAL -->
-<div class="modal-bg" id="productModal">
-  <div class="modal">
-    <h3 id="productModalTitle">Add Product</h3>
-    <label>Name *</label>
-    <input type="text" id="productName" placeholder="Product name" />
-    <label>Price *</label>
-    <input type="number" id="productPrice" placeholder="0.00" step="0.01" min="0" />
-    <label>Stock</label>
-    <input type="number" id="productStock" placeholder="0" min="0" />
-    <label>Category</label>
-    <input type="text" id="productCategory" placeholder="Category" />
-    <label>Description</label>
-    <textarea id="productDesc" placeholder="Product description"></textarea>
-    <label>Image URL</label>
-    <input type="url" id="productImage" placeholder="https://..." />
-    <label>Status</label>
-    <select id="productStatus">
-      <option value="true">Active</option>
-      <option value="false">Inactive</option>
-    </select>
-    <div class="modal-btns">
-      <button class="btn-cancel" id="cancelProduct">Cancel</button>
-      <button class="btn-save" id="saveProduct">Save</button>
+  <!-- PAYMENT MODAL -->
+  <div class="modal-bg" id="paymentModal">
+    <div class="modal">
+      <h3 id="paymentModalTitle">Add Payment</h3>
+      <label>User ID *</label>
+      <input type="text" id="paymentUserId" placeholder="User UUID" />
+      <label>Product ID</label>
+      <input type="text" id="paymentProductId" placeholder="Product UUID (optional)" />
+      <label>Amount *</label>
+      <input type="number" id="paymentAmount" placeholder="0.00" step="0.01" min="0" />
+      <label>Currency</label>
+      <input type="text" id="paymentCurrency" placeholder="USD" maxlength="3" />
+      <label>Status</label>
+      <select id="paymentStatus">
+        <option value="pending">Pending</option>
+        <option value="completed">Completed</option>
+        <option value="failed">Failed</option>
+        <option value="refunded">Refunded</option>
+      </select>
+      <label>Payment Method</label>
+      <input type="text" id="paymentMethod" placeholder="e.g., QR, Cash, Bank" />
+      <label>Reference</label>
+      <input type="text" id="paymentReference" placeholder="Payment reference" />
+      <label>Notes</label>
+      <textarea id="paymentNotes" placeholder="Additional notes"></textarea>
+      <div class="modal-btns">
+        <button class="btn-cancel" id="cancelPayment">Cancel</button>
+        <button class="btn-save" id="savePayment">Save</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- PAYMENT MODAL -->
-<div class="modal-bg" id="paymentModal">
-  <div class="modal">
-    <h3 id="paymentModalTitle">Add Payment</h3>
-    <label>User ID *</label>
-    <input type="text" id="paymentUserId" placeholder="User UUID" />
-    <label>Product ID</label>
-    <input type="text" id="paymentProductId" placeholder="Product UUID (optional)" />
-    <label>Amount *</label>
-    <input type="number" id="paymentAmount" placeholder="0.00" step="0.01" min="0" />
-    <label>Currency</label>
-    <input type="text" id="paymentCurrency" placeholder="USD" maxlength="3" />
-    <label>Status</label>
-    <select id="paymentStatus">
-      <option value="pending">Pending</option>
-      <option value="completed">Completed</option>
-      <option value="failed">Failed</option>
-      <option value="refunded">Refunded</option>
-    </select>
-    <label>Payment Method</label>
-    <input type="text" id="paymentMethod" placeholder="e.g., QR, Cash, Bank" />
-    <label>Reference</label>
-    <input type="text" id="paymentReference" placeholder="Payment reference" />
-    <label>Notes</label>
-    <textarea id="paymentNotes" placeholder="Additional notes"></textarea>
-    <div class="modal-btns">
-      <button class="btn-cancel" id="cancelPayment">Cancel</button>
-      <button class="btn-save" id="savePayment">Save</button>
-    </div>
-  </div>
-</div>
+  <!-- TOAST -->
+  <div id="toast"></div>
 
-<!-- TOAST -->
-<div id="toast"></div>
+  <script type="module">
+    import { logout } from './api.js';
 
-<script type="module">
-  import { logout } from './api.js';
+    const API = 'https://block-paradise-backend.onrender.com/api/v1';
+    const token = () => localStorage.getItem('token');
 
-  const API = 'https://block-paradise-backend.onrender.com/api/v1';
-  const token = () => localStorage.getItem('token');
-
-  // ── Guard: redirect if not logged in ──────────────────────────────────
-  if (!token()) {
-    window.location.href = 'login.html';
-  }
-
-  // Check admin
-  try {
-    const payload = JSON.parse(atob(token().split('.')[1]));
-    if (!payload.isAdmin) {
-      showNoAdmin();
-      throw new Error('Not admin');
+    // ── Guard: redirect if not logged in ──────────────────────────────────
+    if (!token()) {
+      window.location.href = 'login.html';
     }
-  } catch {
-    // Will show no admin or redirect
-  }
 
-  function showNoAdmin() {
-    document.body.innerHTML = `
+    // Check admin
+    try {
+      const payload = JSON.parse(atob(token().split('.')[1]));
+      if (!payload.isAdmin) {
+        showNoAdmin();
+        throw new Error('Not admin');
+      }
+    } catch {
+      // Will show no admin or redirect
+    }
+
+    function showNoAdmin() {
+      document.body.innerHTML = `
       <div style="display:flex;height:100vh;align-items:center;justify-content:center;font-family:Arial">
         <div style="text-align:center">
           <div style="font-size:48px">🔒</div>
@@ -767,133 +792,133 @@
           <a href="blockparadise.html" style="color:#0369a1">← Back to shop</a>
         </div>
       </div>`;
-  }
+    }
 
-  // ── Toast ──────────────────────────────────────────────────────────────
-  function toast(msg, duration = 2800) {
-    const el = document.getElementById('toast');
-    el.textContent = msg;
-    el.classList.add('show');
-    setTimeout(() => el.classList.remove('show'), duration);
-  }
+    // ── Toast ──────────────────────────────────────────────────────────────
+    function toast(msg, duration = 2800) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), duration);
+    }
 
-  // ── Auth header ────────────────────────────────────────────────────────
-  function authHeaders() {
-    return {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token()}`
-    };
-  }
+    // ── Auth header ────────────────────────────────────────────────────────
+    function authHeaders() {
+      return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token()}`
+      };
+    }
 
-  // ── Logout ─────────────────────────────────────────────────────────────
-  document.getElementById('logoutLink').addEventListener('click', (e) => {
-    e.preventDefault();
-    logout();
-    window.location.href = 'login.html';
-  });
-
-  document.getElementById('sidebarLogout').addEventListener('click', (e) => {
-    e.preventDefault();
-    logout();
-    window.location.href = 'login.html';
-  });
-
-  // ── Escape HTML ────────────────────────────────────────────────────────
-  function esc(s) {
-    if (s == null) return '';
-    return String(s).replace(/[&<>"']/g, c =>
-      ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
-  }
-
-  // ── Tab Switching ───────────────────────────────────────────────────────
-  const tabLinks = document.querySelectorAll('.sidebar-link[data-tab]');
-  const tabContents = document.querySelectorAll('.tab-content');
-
-  tabLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      const tab = link.dataset.tab;
-      tabLinks.forEach(l => l.classList.remove('active'));
-      link.classList.add('active');
-      tabContents.forEach(c => c.classList.remove('active'));
-      document.getElementById('tab-' + tab).classList.add('active');
-      
-      // Lazy load data
-      if (tab === 'products' && !productsLoaded) loadProducts(1);
-      if (tab === 'payments' && !paymentsLoaded) loadPayments(1);
+    // ── Logout ─────────────────────────────────────────────────────────────
+    document.getElementById('logoutLink').addEventListener('click', (e) => {
+      e.preventDefault();
+      logout();
+      window.location.href = 'login.html';
     });
-  });
 
-  // ── Stats ──────────────────────────────────────────────────────────────
-  let productsLoaded = false;
-  let paymentsLoaded = false;
+    document.getElementById('sidebarLogout').addEventListener('click', (e) => {
+      e.preventDefault();
+      logout();
+      window.location.href = 'login.html';
+    });
 
-  async function loadStats() {
-    try {
-      // User stats
-      const res = await fetch(`${API}/admin/stats`, { headers: authHeaders() });
-      if (res.status === 403) { showNoAdmin(); return; }
-      const data = await res.json();
-      document.getElementById('statTotalUsers').textContent = data.totalUsers ?? '—';
-      document.getElementById('statNewUsers').textContent = data.newUsersThisWeek ?? '—';
-      document.getElementById('statAdmins').textContent = data.adminCount ?? '—';
-    } catch { /* ignore */ }
+    // ── Escape HTML ────────────────────────────────────────────────────────
+    function esc(s) {
+      if (s == null) return '';
+      return String(s).replace(/[&<>"']/g, c =>
+        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
 
-    try {
-      // Product count
-      const pres = await fetch(`${API}/admin/products?limit=1`, { headers: authHeaders() });
-      const pdata = await pres.json();
-      document.getElementById('statProducts').textContent = pdata.pagination?.total ?? '0';
-    } catch { /* ignore */ }
+    // ── Tab Switching ───────────────────────────────────────────────────────
+    const tabLinks = document.querySelectorAll('.sidebar-link[data-tab]');
+    const tabContents = document.querySelectorAll('.tab-content');
 
-    try {
-      // Payment stats
-      const payRes = await fetch(`${API}/admin/payments?limit=1`, { headers: authHeaders() });
-      const payData = await payRes.json();
-      
-      // Get completed total
-      const compRes = await fetch(`${API}/admin/payments?status=completed&limit=1`, { headers: authHeaders() });
-      const compData = await compRes.json();
-      document.getElementById('statRevenue').textContent = '$' + (compData.pagination?.total || '0');
-      
-      // Get pending count
-      const pendRes = await fetch(`${API}/admin/payments?status=pending&limit=1`, { headers: authHeaders() });
-      const pendData = await pendRes.json();
-      document.getElementById('statPending').textContent = pendData.pagination?.total ?? '0';
-    } catch { /* ignore */ }
-  }
+    tabLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        const tab = link.dataset.tab;
+        tabLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        tabContents.forEach(c => c.classList.remove('active'));
+        document.getElementById('tab-' + tab).classList.add('active');
 
-  // ═══════════════════════════════════════════════════════════════════════
-  // USERS TAB
-  // ═══════════════════════════════════════════════════════════════════════
-  let userPage = 1, userTotal = 1;
-  let userSearchTimer = null;
-  let editingUserId = null;
+        // Lazy load data
+        if (tab === 'products' && !productsLoaded) loadProducts(1);
+        if (tab === 'payments' && !paymentsLoaded) loadPayments(1);
+      });
+    });
 
-  async function loadUsers(page = 1) {
-    const search = document.getElementById('userSearch').value.trim();
-    const url = `${API}/admin/users?page=${page}&limit=10&search=${encodeURIComponent(search)}`;
-    const tbody = document.getElementById('userTableBody');
-    tbody.innerHTML = '<tr><td colspan="5" class="loading">Loading…</td></tr>';
+    // ── Stats ──────────────────────────────────────────────────────────────
+    let productsLoaded = false;
+    let paymentsLoaded = false;
 
-    try {
-      const res = await fetch(url, { headers: authHeaders() });
-      if (res.status === 403) { showNoAdmin(); return; }
-      const data = await res.json();
+    async function loadStats() {
+      try {
+        // User stats
+        const res = await fetch(`${API}/admin/stats`, { headers: authHeaders() });
+        if (res.status === 403) { showNoAdmin(); return; }
+        const data = await res.json();
+        document.getElementById('statTotalUsers').textContent = data.totalUsers ?? '—';
+        document.getElementById('statNewUsers').textContent = data.newUsersThisWeek ?? '—';
+        document.getElementById('statAdmins').textContent = data.adminCount ?? '—';
+      } catch { /* ignore */ }
 
-      userPage = page;
-      userTotal = data.pagination.totalPages || 1;
+      try {
+        // Product count
+        const pres = await fetch(`${API}/admin/products?limit=1`, { headers: authHeaders() });
+        const pdata = await pres.json();
+        document.getElementById('statProducts').textContent = pdata.pagination?.total ?? '0';
+      } catch { /* ignore */ }
 
-      document.getElementById('userPgInfo').textContent =
-        `Page ${userPage} of ${userTotal}  (${data.pagination.total} users)`;
-      document.getElementById('userPrevBtn').disabled = userPage <= 1;
-      document.getElementById('userNextBtn').disabled = userPage >= userTotal;
+      try {
+        // Payment stats
+        const payRes = await fetch(`${API}/admin/payments?limit=1`, { headers: authHeaders() });
+        const payData = await payRes.json();
 
-      if (!data.users || data.users.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="empty">No users found.</td></tr>';
-        return;
-      }
+        // Get completed total
+        const compRes = await fetch(`${API}/admin/payments?status=completed&limit=1`, { headers: authHeaders() });
+        const compData = await compRes.json();
+        document.getElementById('statRevenue').textContent = '$' + (compData.pagination?.total || '0');
 
-      tbody.innerHTML = data.users.map(u => `
+        // Get pending count
+        const pendRes = await fetch(`${API}/admin/payments?status=pending&limit=1`, { headers: authHeaders() });
+        const pendData = await pendRes.json();
+        document.getElementById('statPending').textContent = pendData.pagination?.total ?? '0';
+      } catch { /* ignore */ }
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // USERS TAB
+    // ═══════════════════════════════════════════════════════════════════════
+    let userPage = 1, userTotal = 1;
+    let userSearchTimer = null;
+    let editingUserId = null;
+
+    async function loadUsers(page = 1) {
+      const search = document.getElementById('userSearch').value.trim();
+      const url = `${API}/admin/users?page=${page}&limit=10&search=${encodeURIComponent(search)}`;
+      const tbody = document.getElementById('userTableBody');
+      tbody.innerHTML = '<tr><td colspan="5" class="loading">Loading…</td></tr>';
+
+      try {
+        const res = await fetch(url, { headers: authHeaders() });
+        if (res.status === 403) { showNoAdmin(); return; }
+        const data = await res.json();
+
+        userPage = page;
+        userTotal = data.pagination.totalPages || 1;
+
+        document.getElementById('userPgInfo').textContent =
+          `Page ${userPage} of ${userTotal}  (${data.pagination.total} users)`;
+        document.getElementById('userPrevBtn').disabled = userPage <= 1;
+        document.getElementById('userNextBtn').disabled = userPage >= userTotal;
+
+        if (!data.users || data.users.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" class="empty">No users found.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = data.users.map(u => `
         <tr>
           <td>${esc(u.username)}</td>
           <td>${esc(u.email)}</td>
@@ -909,137 +934,137 @@
           </td>
         </tr>
       `).join('');
-    } catch {
-      tbody.innerHTML = '<tr><td colspan="5" class="empty">Failed to load users.</td></tr>';
+      } catch {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty">Failed to load users.</td></tr>';
+      }
     }
-  }
 
-  window.openUserEdit = function(id, username, email, isAdmin) {
-    editingUserId = id;
-    document.getElementById('editUsername').value = username;
-    document.getElementById('editEmail').value = email;
-    document.getElementById('editRole').value = String(isAdmin);
-    document.getElementById('editPassword').value = '';
-    document.getElementById('userEditModal').classList.add('open');
-  };
-
-  document.getElementById('cancelUserEdit').addEventListener('click', () => {
-    document.getElementById('userEditModal').classList.remove('open');
-  });
-
-  document.getElementById('saveUserEdit').addEventListener('click', async () => {
-    const body = {
-      username: document.getElementById('editUsername').value.trim(),
-      email: document.getElementById('editEmail').value.trim(),
-      isAdmin: document.getElementById('editRole').value === 'true',
+    window.openUserEdit = function (id, username, email, isAdmin) {
+      editingUserId = id;
+      document.getElementById('editUsername').value = username;
+      document.getElementById('editEmail').value = email;
+      document.getElementById('editRole').value = String(isAdmin);
+      document.getElementById('editPassword').value = '';
+      document.getElementById('userEditModal').classList.add('open');
     };
-    const pw = document.getElementById('editPassword').value;
 
-    try {
-      const res = await fetch(`${API}/admin/users/${editingUserId}`, {
-        method: 'PATCH',
-        headers: authHeaders(),
-        body: JSON.stringify(body),
-      });
-      const data = await res.json();
-      if (!res.ok) { toast('❌ ' + (data.message || 'Update failed')); return; }
+    document.getElementById('cancelUserEdit').addEventListener('click', () => {
+      document.getElementById('userEditModal').classList.remove('open');
+    });
 
-      if (pw) {
-        const pr = await fetch(`${API}/admin/users/${editingUserId}/reset-password`, {
+    document.getElementById('saveUserEdit').addEventListener('click', async () => {
+      const body = {
+        username: document.getElementById('editUsername').value.trim(),
+        email: document.getElementById('editEmail').value.trim(),
+        isAdmin: document.getElementById('editRole').value === 'true',
+      };
+      const pw = document.getElementById('editPassword').value;
+
+      try {
+        const res = await fetch(`${API}/admin/users/${editingUserId}`, {
           method: 'PATCH',
           headers: authHeaders(),
-          body: JSON.stringify({ newPassword: pw }),
+          body: JSON.stringify(body),
         });
-        if (!pr.ok) { toast('⚠️ Info saved but password reset failed'); }
+        const data = await res.json();
+        if (!res.ok) { toast('❌ ' + (data.message || 'Update failed')); return; }
+
+        if (pw) {
+          const pr = await fetch(`${API}/admin/users/${editingUserId}/reset-password`, {
+            method: 'PATCH',
+            headers: authHeaders(),
+            body: JSON.stringify({ newPassword: pw }),
+          });
+          if (!pr.ok) { toast('⚠️ Info saved but password reset failed'); }
+        }
+
+        document.getElementById('userEditModal').classList.remove('open');
+        toast('✅ User updated');
+        loadUsers(userPage);
+        loadStats();
+      } catch {
+        toast('❌ Network error');
       }
+    });
 
-      document.getElementById('userEditModal').classList.remove('open');
-      toast('✅ User updated');
-      loadUsers(userPage);
-      loadStats();
-    } catch {
-      toast('❌ Network error');
-    }
-  });
-
-  window.deleteUser = async function(id, username) {
-    if (!confirm(`Delete user "${username}"? This cannot be undone.`)) return;
-    try {
-      const res = await fetch(`${API}/admin/users/${id}`, {
-        method: 'DELETE', headers: authHeaders()
-      });
-      const data = await res.json();
-      if (!res.ok) { toast('❌ ' + (data.message || 'Delete failed')); return; }
-      toast('🗑️ User deleted');
-      loadUsers(userPage);
-      loadStats();
-    } catch {
-      toast('❌ Network error');
-    }
-  };
-
-  document.getElementById('userPrevBtn').addEventListener('click', () => {
-    if (userPage > 1) loadUsers(userPage - 1);
-  });
-  document.getElementById('userNextBtn').addEventListener('click', () => {
-    if (userPage < userTotal) loadUsers(userPage + 1);
-  });
-
-  document.getElementById('userSearch').addEventListener('input', () => {
-    clearTimeout(userSearchTimer);
-    userSearchTimer = setTimeout(() => loadUsers(1), 380);
-  });
-
-  // ═══════════════════════════════════════════════════════════════════════
-  // PRODUCTS TAB
-  // ═══════════════════════════════════════════════════════════════════════
-  let productPage = 1, productTotal = 1;
-  let productSearchTimer = null;
-  let editingProductId = null;
-  let productCategories = [];
-
-  async function loadProducts(page = 1) {
-    productsLoaded = true;
-    const search = document.getElementById('productSearch').value.trim();
-    const category = document.getElementById('productCategoryFilter').value;
-    const active = document.getElementById('productActiveFilter').value;
-    
-    let url = `${API}/admin/products?page=${page}&limit=10&search=${encodeURIComponent(search)}`;
-    if (category) url += `&category=${encodeURIComponent(category)}`;
-    if (active) url += `&active=${active}`;
-    
-    const tbody = document.getElementById('productTableBody');
-    tbody.innerHTML = '<tr><td colspan="7" class="loading">Loading…</td></tr>';
-
-    try {
-      const res = await fetch(url, { headers: authHeaders() });
-      const data = await res.json();
-
-      productPage = page;
-      productTotal = data.pagination.totalPages || 1;
-
-      document.getElementById('productPgInfo').textContent =
-        `Page ${productPage} of ${productTotal}  (${data.pagination.total} products)`;
-      document.getElementById('productPrevBtn').disabled = productPage <= 1;
-      document.getElementById('productNextBtn').disabled = productPage >= productTotal;
-
-      // Update category filter
-      const cats = [...new Set(data.products?.map(p => p.category).filter(Boolean))];
-      if (cats.length > 0) {
-        productCategories = cats;
-        const sel = document.getElementById('productCategoryFilter');
-        const current = sel.value;
-        sel.innerHTML = '<option value="">All Categories</option>' + 
-          cats.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
-        sel.value = current;
+    window.deleteUser = async function (id, username) {
+      if (!confirm(`Delete user "${username}"? This cannot be undone.`)) return;
+      try {
+        const res = await fetch(`${API}/admin/users/${id}`, {
+          method: 'DELETE', headers: authHeaders()
+        });
+        const data = await res.json();
+        if (!res.ok) { toast('❌ ' + (data.message || 'Delete failed')); return; }
+        toast('🗑️ User deleted');
+        loadUsers(userPage);
+        loadStats();
+      } catch {
+        toast('❌ Network error');
       }
+    };
 
-      if (!data.products || data.products.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="empty">No products found.</td></tr>';
-        return;
-      }
+    document.getElementById('userPrevBtn').addEventListener('click', () => {
+      if (userPage > 1) loadUsers(userPage - 1);
+    });
+    document.getElementById('userNextBtn').addEventListener('click', () => {
+      if (userPage < userTotal) loadUsers(userPage + 1);
+    });
 
-      tbody.innerHTML = data.products.map(p => `
+    document.getElementById('userSearch').addEventListener('input', () => {
+      clearTimeout(userSearchTimer);
+      userSearchTimer = setTimeout(() => loadUsers(1), 380);
+    });
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // PRODUCTS TAB
+    // ═══════════════════════════════════════════════════════════════════════
+    let productPage = 1, productTotal = 1;
+    let productSearchTimer = null;
+    let editingProductId = null;
+    let productCategories = [];
+
+    async function loadProducts(page = 1) {
+      productsLoaded = true;
+      const search = document.getElementById('productSearch').value.trim();
+      const category = document.getElementById('productCategoryFilter').value;
+      const active = document.getElementById('productActiveFilter').value;
+
+      let url = `${API}/admin/products?page=${page}&limit=10&search=${encodeURIComponent(search)}`;
+      if (category) url += `&category=${encodeURIComponent(category)}`;
+      if (active) url += `&active=${active}`;
+
+      const tbody = document.getElementById('productTableBody');
+      tbody.innerHTML = '<tr><td colspan="7" class="loading">Loading…</td></tr>';
+
+      try {
+        const res = await fetch(url, { headers: authHeaders() });
+        const data = await res.json();
+
+        productPage = page;
+        productTotal = data.pagination.totalPages || 1;
+
+        document.getElementById('productPgInfo').textContent =
+          `Page ${productPage} of ${productTotal}  (${data.pagination.total} products)`;
+        document.getElementById('productPrevBtn').disabled = productPage <= 1;
+        document.getElementById('productNextBtn').disabled = productPage >= productTotal;
+
+        // Update category filter
+        const cats = [...new Set(data.products?.map(p => p.category).filter(Boolean))];
+        if (cats.length > 0) {
+          productCategories = cats;
+          const sel = document.getElementById('productCategoryFilter');
+          const current = sel.value;
+          sel.innerHTML = '<option value="">All Categories</option>' +
+            cats.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+          sel.value = current;
+        }
+
+        if (!data.products || data.products.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" class="empty">No products found.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = data.products.map(p => `
         <tr>
           <td><img src="${esc(p.image_url || '')}" class="product-thumb" onerror="this.style.background='#ddd'"></td>
           <td>${esc(p.name)}</td>
@@ -1057,157 +1082,157 @@
           </td>
         </tr>
       `).join('');
-    } catch {
-      tbody.innerHTML = '<tr><td colspan="7" class="empty">Failed to load products.</td></tr>';
+      } catch {
+        tbody.innerHTML = '<tr><td colspan="7" class="empty">Failed to load products.</td></tr>';
+      }
     }
-  }
 
-  window.openProductEdit = function(id, name, price, stock, category, desc, image, active) {
-    editingProductId = id;
-    document.getElementById('productModalTitle').textContent = 'Edit Product';
-    document.getElementById('productName').value = name;
-    document.getElementById('productPrice').value = price;
-    document.getElementById('productStock').value = stock;
-    document.getElementById('productCategory').value = category || '';
-    document.getElementById('productDesc').value = desc || '';
-    document.getElementById('productImage').value = image || '';
-    document.getElementById('productStatus').value = String(active);
-    document.getElementById('productModal').classList.add('open');
-  };
-
-  document.getElementById('addProductBtn').addEventListener('click', () => {
-    editingProductId = null;
-    document.getElementById('productModalTitle').textContent = 'Add Product';
-    document.getElementById('productName').value = '';
-    document.getElementById('productPrice').value = '';
-    document.getElementById('productStock').value = '0';
-    document.getElementById('productCategory').value = '';
-    document.getElementById('productDesc').value = '';
-    document.getElementById('productImage').value = '';
-    document.getElementById('productStatus').value = 'true';
-    document.getElementById('productModal').classList.add('open');
-  });
-
-  document.getElementById('cancelProduct').addEventListener('click', () => {
-    document.getElementById('productModal').classList.remove('open');
-  });
-
-  document.getElementById('saveProduct').addEventListener('click', async () => {
-    const name = document.getElementById('productName').value.trim();
-    const price = parseFloat(document.getElementById('productPrice').value);
-    
-    if (!name) { toast('❌ Name is required'); return; }
-    if (isNaN(price) || price < 0) { toast('❌ Valid price is required'); return; }
-
-    const body = {
-      name: name,
-      price: price,
-      stock: parseInt(document.getElementById('productStock').value) || 0,
-      category: document.getElementById('productCategory').value.trim() || null,
-      description: document.getElementById('productDesc').value.trim() || null,
-      image_url: document.getElementById('productImage').value.trim() || null,
-      is_active: document.getElementById('productStatus').value === 'true',
+    window.openProductEdit = function (id, name, price, stock, category, desc, image, active) {
+      editingProductId = id;
+      document.getElementById('productModalTitle').textContent = 'Edit Product';
+      document.getElementById('productName').value = name;
+      document.getElementById('productPrice').value = price;
+      document.getElementById('productStock').value = stock;
+      document.getElementById('productCategory').value = category || '';
+      document.getElementById('productDesc').value = desc || '';
+      document.getElementById('productImage').value = image || '';
+      document.getElementById('productStatus').value = String(active);
+      document.getElementById('productModal').classList.add('open');
     };
 
-    try {
-      let res;
-      if (editingProductId) {
-        res = await fetch(`${API}/admin/products/${editingProductId}`, {
-          method: 'PATCH',
-          headers: authHeaders(),
-          body: JSON.stringify(body),
-        });
-      } else {
-        res = await fetch(`${API}/admin/products`, {
-          method: 'POST',
-          headers: authHeaders(),
-          body: JSON.stringify(body),
-        });
-      }
-      const data = await res.json();
-      if (!res.ok) { toast('❌ ' + (data.message || 'Operation failed')); return; }
-      
+    document.getElementById('addProductBtn').addEventListener('click', () => {
+      editingProductId = null;
+      document.getElementById('productModalTitle').textContent = 'Add Product';
+      document.getElementById('productName').value = '';
+      document.getElementById('productPrice').value = '';
+      document.getElementById('productStock').value = '0';
+      document.getElementById('productCategory').value = '';
+      document.getElementById('productDesc').value = '';
+      document.getElementById('productImage').value = '';
+      document.getElementById('productStatus').value = 'true';
+      document.getElementById('productModal').classList.add('open');
+    });
+
+    document.getElementById('cancelProduct').addEventListener('click', () => {
       document.getElementById('productModal').classList.remove('open');
-      toast(editingProductId ? '✅ Product updated' : '✅ Product added');
-      loadProducts(productPage);
-      loadStats();
-    } catch {
-      toast('❌ Network error');
-    }
-  });
+    });
 
-  window.deleteProduct = async function(id, name) {
-    if (!confirm(`Delete product "${name}"? This cannot be undone.`)) return;
-    try {
-      const res = await fetch(`${API}/admin/products/${id}`, {
-        method: 'DELETE', headers: authHeaders()
-      });
-      const data = await res.json();
-      if (!res.ok) { toast('❌ ' + (data.message || 'Delete failed')); return; }
-      toast('🗑️ Product deleted');
-      loadProducts(productPage);
-      loadStats();
-    } catch {
-      toast('❌ Network error');
-    }
-  };
+    document.getElementById('saveProduct').addEventListener('click', async () => {
+      const name = document.getElementById('productName').value.trim();
+      const price = parseFloat(document.getElementById('productPrice').value);
 
-  document.getElementById('productPrevBtn').addEventListener('click', () => {
-    if (productPage > 1) loadProducts(productPage - 1);
-  });
-  document.getElementById('productNextBtn').addEventListener('click', () => {
-    if (productPage < productTotal) loadProducts(productPage + 1);
-  });
+      if (!name) { toast('❌ Name is required'); return; }
+      if (isNaN(price) || price < 0) { toast('❌ Valid price is required'); return; }
 
-  document.getElementById('productSearch').addEventListener('input', () => {
-    clearTimeout(productSearchTimer);
-    productSearchTimer = setTimeout(() => loadProducts(1), 380);
-  });
+      const body = {
+        name: name,
+        price: price,
+        stock: parseInt(document.getElementById('productStock').value) || 0,
+        category: document.getElementById('productCategory').value.trim() || null,
+        description: document.getElementById('productDesc').value.trim() || null,
+        image_url: document.getElementById('productImage').value.trim() || null,
+        is_active: document.getElementById('productStatus').value === 'true',
+      };
 
-  document.getElementById('productCategoryFilter').addEventListener('change', () => loadProducts(1));
-  document.getElementById('productActiveFilter').addEventListener('change', () => loadProducts(1));
+      try {
+        let res;
+        if (editingProductId) {
+          res = await fetch(`${API}/admin/products/${editingProductId}`, {
+            method: 'PATCH',
+            headers: authHeaders(),
+            body: JSON.stringify(body),
+          });
+        } else {
+          res = await fetch(`${API}/admin/products`, {
+            method: 'POST',
+            headers: authHeaders(),
+            body: JSON.stringify(body),
+          });
+        }
+        const data = await res.json();
+        if (!res.ok) { toast('❌ ' + (data.message || 'Operation failed')); return; }
 
-  // ═══════════════════════════════════════════════════════════════════════
-  // PAYMENTS TAB
-  // ═══════════════════════════════════════════════════════════════════════
-  let paymentPage = 1, paymentTotal = 1;
-  let paymentSearchTimer = null;
-  let editingPaymentId = null;
-
-  async function loadPayments(page = 1) {
-    paymentsLoaded = true;
-    const status = document.getElementById('paymentStatusFilter').value;
-    const userSearch = document.getElementById('paymentUserSearch').value.trim();
-    
-    let url = `${API}/admin/payments?page=${page}&limit=10`;
-    if (status) url += `&status=${status}`;
-    if (userSearch) url += `&user_id=${encodeURIComponent(userSearch)}`;
-    
-    const tbody = document.getElementById('paymentTableBody');
-    tbody.innerHTML = '<tr><td colspan="8" class="loading">Loading…</td></tr>';
-
-    try {
-      const res = await fetch(url, { headers: authHeaders() });
-      const data = await res.json();
-
-      paymentPage = page;
-      paymentTotal = data.pagination.totalPages || 1;
-
-      document.getElementById('paymentPgInfo').textContent =
-        `Page ${paymentPage} of ${paymentTotal}  (${data.pagination.total} payments)`;
-      document.getElementById('paymentPrevBtn').disabled = paymentPage <= 1;
-      document.getElementById('paymentNextBtn').disabled = paymentPage >= paymentTotal;
-
-      if (!data.payments || data.payments.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="empty">No payments found.</td></tr>';
-        return;
+        document.getElementById('productModal').classList.remove('open');
+        toast(editingProductId ? '✅ Product updated' : '✅ Product added');
+        loadProducts(productPage);
+        loadStats();
+      } catch {
+        toast('❌ Network error');
       }
+    });
 
-      tbody.innerHTML = data.payments.map(p => `
+    window.deleteProduct = async function (id, name) {
+      if (!confirm(`Delete product "${name}"? This cannot be undone.`)) return;
+      try {
+        const res = await fetch(`${API}/admin/products/${id}`, {
+          method: 'DELETE', headers: authHeaders()
+        });
+        const data = await res.json();
+        if (!res.ok) { toast('❌ ' + (data.message || 'Delete failed')); return; }
+        toast('🗑️ Product deleted');
+        loadProducts(productPage);
+        loadStats();
+      } catch {
+        toast('❌ Network error');
+      }
+    };
+
+    document.getElementById('productPrevBtn').addEventListener('click', () => {
+      if (productPage > 1) loadProducts(productPage - 1);
+    });
+    document.getElementById('productNextBtn').addEventListener('click', () => {
+      if (productPage < productTotal) loadProducts(productPage + 1);
+    });
+
+    document.getElementById('productSearch').addEventListener('input', () => {
+      clearTimeout(productSearchTimer);
+      productSearchTimer = setTimeout(() => loadProducts(1), 380);
+    });
+
+    document.getElementById('productCategoryFilter').addEventListener('change', () => loadProducts(1));
+    document.getElementById('productActiveFilter').addEventListener('change', () => loadProducts(1));
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // PAYMENTS TAB
+    // ═══════════════════════════════════════════════════════════════════════
+    let paymentPage = 1, paymentTotal = 1;
+    let paymentSearchTimer = null;
+    let editingPaymentId = null;
+
+    async function loadPayments(page = 1) {
+      paymentsLoaded = true;
+      const status = document.getElementById('paymentStatusFilter').value;
+      const userSearch = document.getElementById('paymentUserSearch').value.trim();
+
+      let url = `${API}/admin/payments?page=${page}&limit=10`;
+      if (status) url += `&status=${status}`;
+      if (userSearch) url += `&user_id=${encodeURIComponent(userSearch)}`;
+
+      const tbody = document.getElementById('paymentTableBody');
+      tbody.innerHTML = '<tr><td colspan="8" class="loading">Loading…</td></tr>';
+
+      try {
+        const res = await fetch(url, { headers: authHeaders() });
+        const data = await res.json();
+
+        paymentPage = page;
+        paymentTotal = data.pagination.totalPages || 1;
+
+        document.getElementById('paymentPgInfo').textContent =
+          `Page ${paymentPage} of ${paymentTotal}  (${data.pagination.total} payments)`;
+        document.getElementById('paymentPrevBtn').disabled = paymentPage <= 1;
+        document.getElementById('paymentNextBtn').disabled = paymentPage >= paymentTotal;
+
+        if (!data.payments || data.payments.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="8" class="empty">No payments found.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = data.payments.map(p => `
         <tr>
           <td>${esc(p.reference) || '—'}</td>
-          <td>${esc(p.users?.username || p.user_id?.substring(0,8) || '—')}</td>
-          <td>${esc(p.products?.name || p.product_id?.substring(0,8) || '—')}</td>
+          <td>${esc(p.users?.username || p.user_id?.substring(0, 8) || '—')}</td>
+          <td>${esc(p.products?.name || p.product_id?.substring(0, 8) || '—')}</td>
           <td>$${Number(p.amount).toFixed(2)} ${esc(p.currency)}</td>
           <td><span class="badge badge-${p.status}">${p.status}</span></td>
           <td>${esc(p.payment_method) || '—'}</td>
@@ -1220,144 +1245,145 @@
           </td>
         </tr>
       `).join('');
-    } catch {
-      tbody.innerHTML = '<tr><td colspan="8" class="empty">Failed to load payments.</td></tr>';
+      } catch {
+        tbody.innerHTML = '<tr><td colspan="8" class="empty">Failed to load payments.</td></tr>';
+      }
     }
-  }
 
-  window.openPaymentEdit = function(id, status, method, reference, notes) {
-    editingPaymentId = id;
-    document.getElementById('paymentModalTitle').textContent = 'Edit Payment';
-    document.getElementById('paymentUserId').parentElement.style.display = 'none';
-    document.getElementById('paymentProductId').parentElement.style.display = 'none';
-    document.getElementById('paymentAmount').parentElement.style.display = 'none';
-    document.getElementById('paymentCurrency').parentElement.style.display = 'none';
-    document.getElementById('paymentStatus').value = status;
-    document.getElementById('paymentMethod').value = method || '';
-    document.getElementById('paymentReference').value = reference || '';
-    document.getElementById('paymentNotes').value = notes || '';
-    document.getElementById('paymentModal').classList.add('open');
-  };
+    window.openPaymentEdit = function (id, status, method, reference, notes) {
+      editingPaymentId = id;
+      document.getElementById('paymentModalTitle').textContent = 'Edit Payment';
+      document.getElementById('paymentUserId').parentElement.style.display = 'none';
+      document.getElementById('paymentProductId').parentElement.style.display = 'none';
+      document.getElementById('paymentAmount').parentElement.style.display = 'none';
+      document.getElementById('paymentCurrency').parentElement.style.display = 'none';
+      document.getElementById('paymentStatus').value = status;
+      document.getElementById('paymentMethod').value = method || '';
+      document.getElementById('paymentReference').value = reference || '';
+      document.getElementById('paymentNotes').value = notes || '';
+      document.getElementById('paymentModal').classList.add('open');
+    };
 
-  document.getElementById('addPaymentBtn').addEventListener('click', () => {
-    editingPaymentId = null;
-    document.getElementById('paymentModalTitle').textContent = 'Add Payment';
-    document.getElementById('paymentUserId').parentElement.style.display = 'block';
-    document.getElementById('paymentProductId').parentElement.style.display = 'block';
-    document.getElementById('paymentAmount').parentElement.style.display = 'block';
-    document.getElementById('paymentCurrency').parentElement.style.display = 'block';
-    document.getElementById('paymentUserId').value = '';
-    document.getElementById('paymentProductId').value = '';
-    document.getElementById('paymentAmount').value = '';
-    document.getElementById('paymentCurrency').value = 'USD';
-    document.getElementById('paymentStatus').value = 'pending';
-    document.getElementById('paymentMethod').value = '';
-    document.getElementById('paymentReference').value = '';
-    document.getElementById('paymentNotes').value = '';
-    document.getElementById('paymentModal').classList.add('open');
-  });
+    document.getElementById('addPaymentBtn').addEventListener('click', () => {
+      editingPaymentId = null;
+      document.getElementById('paymentModalTitle').textContent = 'Add Payment';
+      document.getElementById('paymentUserId').parentElement.style.display = 'block';
+      document.getElementById('paymentProductId').parentElement.style.display = 'block';
+      document.getElementById('paymentAmount').parentElement.style.display = 'block';
+      document.getElementById('paymentCurrency').parentElement.style.display = 'block';
+      document.getElementById('paymentUserId').value = '';
+      document.getElementById('paymentProductId').value = '';
+      document.getElementById('paymentAmount').value = '';
+      document.getElementById('paymentCurrency').value = 'USD';
+      document.getElementById('paymentStatus').value = 'pending';
+      document.getElementById('paymentMethod').value = '';
+      document.getElementById('paymentReference').value = '';
+      document.getElementById('paymentNotes').value = '';
+      document.getElementById('paymentModal').classList.add('open');
+    });
 
-  document.getElementById('cancelPayment').addEventListener('click', () => {
-    document.getElementById('paymentModal').classList.remove('open');
-  });
+    document.getElementById('cancelPayment').addEventListener('click', () => {
+      document.getElementById('paymentModal').classList.remove('open');
+    });
 
-  document.getElementById('savePayment').addEventListener('click', async () => {
-    if (editingPaymentId) {
-      // Edit mode - only editable fields
-      const body = {
-        status: document.getElementById('paymentStatus').value,
-        payment_method: document.getElementById('paymentMethod').value.trim() || null,
-        reference: document.getElementById('paymentReference').value.trim() || null,
-        notes: document.getElementById('paymentNotes').value.trim() || null,
-      };
+    document.getElementById('savePayment').addEventListener('click', async () => {
+      if (editingPaymentId) {
+        // Edit mode - only editable fields
+        const body = {
+          status: document.getElementById('paymentStatus').value,
+          payment_method: document.getElementById('paymentMethod').value.trim() || null,
+          reference: document.getElementById('paymentReference').value.trim() || null,
+          notes: document.getElementById('paymentNotes').value.trim() || null,
+        };
 
+        try {
+          const res = await fetch(`${API}/admin/payments/${editingPaymentId}`, {
+            method: 'PATCH',
+            headers: authHeaders(),
+            body: JSON.stringify(body),
+          });
+          const data = await res.json();
+          if (!res.ok) { toast('❌ ' + (data.message || 'Update failed')); return; }
+
+          document.getElementById('paymentModal').classList.remove('open');
+          toast('✅ Payment updated');
+          loadPayments(paymentPage);
+          loadStats();
+        } catch {
+          toast('❌ Network error');
+        }
+      } else {
+        // Add mode
+        const userId = document.getElementById('paymentUserId').value.trim();
+        const amount = parseFloat(document.getElementById('paymentAmount').value);
+
+        if (!userId) { toast('❌ User ID is required'); return; }
+        if (isNaN(amount) || amount < 0) { toast('❌ Valid amount is required'); return; }
+
+        const body = {
+          user_id: userId,
+          product_id: document.getElementById('paymentProductId').value.trim() || null,
+          amount: amount,
+          currency: document.getElementById('paymentCurrency').value.trim() || 'USD',
+          status: document.getElementById('paymentStatus').value,
+          payment_method: document.getElementById('paymentMethod').value.trim() || null,
+          reference: document.getElementById('paymentReference').value.trim() || null,
+          notes: document.getElementById('paymentNotes').value.trim() || null,
+        };
+
+        try {
+          const res = await fetch(`${API}/admin/payments`, {
+            method: 'POST',
+            headers: authHeaders(),
+            body: JSON.stringify(body),
+          });
+          const data = await res.json();
+          if (!res.ok) { toast('❌ ' + (data.message || 'Create failed')); return; }
+
+          document.getElementById('paymentModal').classList.remove('open');
+          toast('✅ Payment added');
+          loadPayments(paymentPage);
+          loadStats();
+        } catch {
+          toast('❌ Network error');
+        }
+      }
+    });
+
+    window.deletePayment = async function (id) {
+      if (!confirm('Delete payment record? This cannot be undone.')) return;
       try {
-        const res = await fetch(`${API}/admin/payments/${editingPaymentId}`, {
-          method: 'PATCH',
-          headers: authHeaders(),
-          body: JSON.stringify(body),
+        const res = await fetch(`${API}/admin/payments/${id}`, {
+          method: 'DELETE', headers: authHeaders()
         });
         const data = await res.json();
-        if (!res.ok) { toast('❌ ' + (data.message || 'Update failed')); return; }
-        
-        document.getElementById('paymentModal').classList.remove('open');
-        toast('✅ Payment updated');
+        if (!res.ok) { toast('❌ ' + (data.message || 'Delete failed')); return; }
+        toast('🗑️ Payment deleted');
         loadPayments(paymentPage);
         loadStats();
       } catch {
         toast('❌ Network error');
       }
-    } else {
-      // Add mode
-      const userId = document.getElementById('paymentUserId').value.trim();
-      const amount = parseFloat(document.getElementById('paymentAmount').value);
-      
-      if (!userId) { toast('❌ User ID is required'); return; }
-      if (isNaN(amount) || amount < 0) { toast('❌ Valid amount is required'); return; }
+    };
 
-      const body = {
-        user_id: userId,
-        product_id: document.getElementById('paymentProductId').value.trim() || null,
-        amount: amount,
-        currency: document.getElementById('paymentCurrency').value.trim() || 'USD',
-        status: document.getElementById('paymentStatus').value,
-        payment_method: document.getElementById('paymentMethod').value.trim() || null,
-        reference: document.getElementById('paymentReference').value.trim() || null,
-        notes: document.getElementById('paymentNotes').value.trim() || null,
-      };
+    document.getElementById('paymentPrevBtn').addEventListener('click', () => {
+      if (paymentPage > 1) loadPayments(paymentPage - 1);
+    });
+    document.getElementById('paymentNextBtn').addEventListener('click', () => {
+      if (paymentPage < paymentTotal) loadPayments(paymentPage + 1);
+    });
 
-      try {
-        const res = await fetch(`${API}/admin/payments`, {
-          method: 'POST',
-          headers: authHeaders(),
-          body: JSON.stringify(body),
-        });
-        const data = await res.json();
-        if (!res.ok) { toast('❌ ' + (data.message || 'Create failed')); return; }
-        
-        document.getElementById('paymentModal').classList.remove('open');
-        toast('✅ Payment added');
-        loadPayments(paymentPage);
-        loadStats();
-      } catch {
-        toast('❌ Network error');
-      }
-    }
-  });
+    document.getElementById('paymentStatusFilter').addEventListener('change', () => loadPayments(1));
+    document.getElementById('paymentUserSearch').addEventListener('input', () => {
+      clearTimeout(paymentSearchTimer);
+      paymentSearchTimer = setTimeout(() => loadPayments(1), 380);
+    });
 
-  window.deletePayment = async function(id) {
-    if (!confirm('Delete payment record? This cannot be undone.')) return;
-    try {
-      const res = await fetch(`${API}/admin/payments/${id}`, {
-        method: 'DELETE', headers: authHeaders()
-      });
-      const data = await res.json();
-      if (!res.ok) { toast('❌ ' + (data.message || 'Delete failed')); return; }
-      toast('🗑️ Payment deleted');
-      loadPayments(paymentPage);
-      loadStats();
-    } catch {
-      toast('❌ Network error');
-    }
-  };
-
-  document.getElementById('paymentPrevBtn').addEventListener('click', () => {
-    if (paymentPage > 1) loadPayments(paymentPage - 1);
-  });
-  document.getElementById('paymentNextBtn').addEventListener('click', () => {
-    if (paymentPage < paymentTotal) loadPayments(paymentPage + 1);
-  });
-
-  document.getElementById('paymentStatusFilter').addEventListener('change', () => loadPayments(1));
-  document.getElementById('paymentUserSearch').addEventListener('input', () => {
-    clearTimeout(paymentSearchTimer);
-    paymentSearchTimer = setTimeout(() => loadPayments(1), 380);
-  });
-
-  // ── Init ───────────────────────────────────────────────────────────────
-  loadStats();
-  loadUsers(1);
-</script>
+    // ── Init ───────────────────────────────────────────────────────────────
+    loadStats();
+    loadUsers(1);
+  </script>
 
 </body>
+
 </html>
