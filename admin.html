@@ -1149,15 +1149,29 @@
             body: JSON.stringify(body),
           });
         }
-        const data = await res.json();
+        
+        if (res.status === 429) {
+          toast('❌ Too many requests. Please wait a moment and try again.');
+          return;
+        }
+        
+        let data;
+        try {
+          data = await res.json();
+        } catch {
+          toast('❌ Server error: ' + res.statusText);
+          return;
+        }
+        
         if (!res.ok) { toast('❌ ' + (data.message || 'Operation failed')); return; }
 
         document.getElementById('productModal').classList.remove('open');
         toast(editingProductId ? '✅ Product updated' : '✅ Product added');
         loadProducts(productPage);
         loadStats();
-      } catch {
-        toast('❌ Network error');
+      } catch (err) {
+        console.error('Save product error:', err);
+        toast('❌ Network error: ' + (err.message || 'Failed to connect to server'));
       }
     });
 
