@@ -1120,19 +1120,23 @@
     document.getElementById('saveProduct').addEventListener('click', async () => {
       const name = document.getElementById('productName').value.trim();
       const price = parseFloat(document.getElementById('productPrice').value);
+      const category = document.getElementById('productCategory').value.trim();
 
       if (!name) { toast('❌ Name is required'); return; }
       if (isNaN(price) || price < 0) { toast('❌ Valid price is required'); return; }
+      if (!category) { toast('❌ Category is required'); return; }
 
       const body = {
         name: name,
-        price: price,
-        stock: parseInt(document.getElementById('productStock').value) || 0,
+        price: document.getElementById('productPrice').value.trim(), // Send as string
+        stock: document.getElementById('productStock').value.trim(), // Send as string
         category: document.getElementById('productCategory').value.trim() || null,
         description: document.getElementById('productDesc').value.trim() || null,
         image_url: document.getElementById('productImage').value.trim() || null,
         is_active: document.getElementById('productStatus').value === 'true',
       };
+
+      console.log('Sending product data:', body);
 
       try {
         let res;
@@ -1155,15 +1159,19 @@
           return;
         }
 
+        const rawText = await res.text();
         let data;
         try {
-          data = await res.json();
+          data = rawText ? JSON.parse(rawText) : null;
         } catch {
-          toast('❌ Server error: ' + res.statusText);
-          return;
+          data = null;
         }
 
-        if (!res.ok) { toast('❌ ' + (data.message || 'Operation failed')); return; }
+        if (!res.ok) {
+          const msg = data?.message || rawText || res.statusText || `Operation failed (${res.status})`;
+          toast('❌ ' + msg);
+          return;
+        }
 
         document.getElementById('productModal').classList.remove('open');
         toast(editingProductId ? '✅ Product updated' : '✅ Product added');
