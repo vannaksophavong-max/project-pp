@@ -1128,11 +1128,11 @@
 
       const body = {
         name: name,
-        price: document.getElementById('productPrice').value.trim(), // Send as string
-        stock: document.getElementById('productStock').value.trim(), // Send as string
-        category: document.getElementById('productCategory').value.trim() || null,
-        description: document.getElementById('productDesc').value.trim() || null,
-        image_url: document.getElementById('productImage').value.trim() || null,
+        price: parseFloat(document.getElementById('productPrice').value),   // number
+        stock: parseInt(document.getElementById('productStock').value, 10), // number
+        category: document.getElementById('productCategory').value.trim() || undefined,
+        description: document.getElementById('productDesc').value.trim() || '',  // empty string, not null
+        image_url: document.getElementById('productImage').value.trim() || undefined,
         is_active: document.getElementById('productStatus').value === 'true',
       };
 
