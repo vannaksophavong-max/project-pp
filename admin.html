@@ -1128,10 +1128,10 @@
 
       const body = {
         name: name,
-        price: parseFloat(document.getElementById('productPrice').value),   // number
-        stock: parseInt(document.getElementById('productStock').value, 10), // number
+        price: price,  // ← already parsed as float on line 1122, just use it!
+        stock: parseInt(document.getElementById('productStock').value, 10) || 0,
         category: document.getElementById('productCategory').value.trim() || undefined,
-        description: document.getElementById('productDesc').value.trim() || '',  // empty string, not null
+        description: document.getElementById('productDesc').value.trim() || undefined,
         image_url: document.getElementById('productImage').value.trim() || undefined,
         is_active: document.getElementById('productStatus').value === 'true',
       };
