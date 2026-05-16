@@ -109,16 +109,27 @@ function modalBuyNow() {
 
 async function loadProducts() {
   try {
-    const response = await fetch("https://block-paradise-backend.onrender.com/api/v1/admin/products?limit=100");
+    const API = "https://block-paradise-backend.onrender.com/api/v1";
+    const url = `${API}/admin/products?limit=100`;
+    const token = localStorage.getItem("token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+    const response = await fetch(url, { headers });
+    if (!response.ok) {
+      const text = await response.text();
+      console.error(`Product fetch failed (${response.status}):`, text || response.statusText);
+      return;
+    }
+
     const data = await response.json();
     const products = data.products || [];
 
     const blockProducts = products
-      .filter(p => p.is_active === true && p.category === "block")
+      .filter(p => (p.is_active === true || p.is_active === 'true' || p.is_active === 1) && p.category === "block")
       .map(p => ({ name: p.name, price: p.price, img: p.image_url, type: "block" }));
 
     const blindProducts = products
-      .filter(p => p.is_active === true && p.category === "blind")
+      .filter(p => (p.is_active === true || p.is_active === 'true' || p.is_active === 1) && p.category === "blind")
       .map(p => ({ name: p.name, price: p.price, img: p.image_url, type: "blind" }));
 
     render(blockProducts, "blockList");
