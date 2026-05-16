@@ -106,23 +106,27 @@ function modalBuyNow() {
 }
 
 /* ── DATA ── */
-const blockProducts = [
-  { name: "Flower Block 1", price: 8, img: "f1.jpg", type: "block" },
-  { name: "Flower Block 2", price: 8, img: "f2.jpg", type: "block" },
-  { name: "Flower Block 3", price: 8, img: "f3.jpg", type: "block" },
-  { name: "Flower Block 4", price: 8, img: "f4.jpg", type: "block" },
-  { name: "Flower Block 5", price: 9, img: "f5.jpg", type: "block" },
-  { name: "Flower Block 6", price: 9, img: "f6.jpg", type: "block" },
-];
 
-const blindProducts = [
-  { name: "Blind Box 1", price: 12, img: "bb1.jpg", type: "blind" },
-  { name: "Blind Box 2", price: 12, img: "bb2.jpg", type: "blind" },
-  { name: "Blind Box 3", price: 8, img: "bb3.jpg", type: "blind" },
-  { name: "Blind Box 4", price: 8, img: "bb4.jpg", type: "blind" },
-  { name: "Blind Box 5", price: 12, img: "bb5.png", type: "blind" },
-  { name: "Blind Box 6", price: 12, img: "bb6.jpg", type: "blind" },
-];
+async function loadProducts() {
+  try {
+    const response = await fetch("https://block-paradise-backend.onrender.com/api/v1/admin/products?limit=100");
+    const data = await response.json();
+    const products = data.products || [];
+
+    const blockProducts = products
+      .filter(p => p.is_active === true && p.category === "block")
+      .map(p => ({ name: p.name, price: p.price, img: p.image_url, type: "block" }));
+
+    const blindProducts = products
+      .filter(p => p.is_active === true && p.category === "blind")
+      .map(p => ({ name: p.name, price: p.price, img: p.image_url, type: "blind" }));
+
+    render(blockProducts, "blockList");
+    render(blindProducts, "blindList");
+  } catch (error) {
+    console.error("Failed to load products:", error);
+  }
+}
 
 /* ── RENDER ── */
 function render(list, id) {
@@ -168,5 +172,4 @@ function render(list, id) {
 
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
 
-render(blockProducts, "blockList");
-render(blindProducts, "blindList");
+loadProducts();
