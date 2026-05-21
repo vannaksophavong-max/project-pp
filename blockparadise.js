@@ -110,7 +110,8 @@ function modalBuyNow() {
 async function loadProducts() {
   try {
     const API = "https://block-paradise-backend.onrender.com/api/v1";
-    const url = `${API}/products?limit=100`;
+    // FIX 1: Pass active=true so only active products are shown to customers
+    const url = `${API}/products?limit=100&active=true`;
 
     const response = await fetch(url);
     if (!response.ok) {
@@ -122,17 +123,40 @@ async function loadProducts() {
     const data = await response.json();
     const products = data.products || [];
 
+    // FIX 2: Broader category matching — handles "block paradise", "blocks", "blind box", "blindbox", etc.
     const normalizeCategory = (value) => String(value || '').trim().toLowerCase();
-    const blockProducts = products
-      .filter(p => (p.is_active === true || p.is_active === 'true' || p.is_active === 1) && normalizeCategory(p.category) === "block")
+
+    const isBlockCategory = (cat) => {
+      const c = normalizeCategory(cat);
+      return c.includes("block") && !c.includes("blind");
+    };
+
+    const isBlindCategory = (cat) => {
+      const c = normalizeCategory(cat);
+      return c.includes("blind");
+    };
+
+    // FIX 3: No need to re-filter is_active here — backend now handles it via active=true param
+    const activeProducts = products;
+
+    const blockProducts = activeProducts
+      .filter(p => isBlockCategory(p.category))
       .map(p => ({ name: p.name, price: p.price, img: p.image_url, type: "block" }));
 
-    const blindProducts = products
-      .filter(p => (p.is_active === true || p.is_active === 'true' || p.is_active === 1) && normalizeCategory(p.category) === "blind")
+    const blindProducts = activeProducts
+      .filter(p => isBlindCategory(p.category))
       .map(p => ({ name: p.name, price: p.price, img: p.image_url, type: "blind" }));
+
+    const otherProducts = activeProducts
+      .filter(p => !isBlockCategory(p.category) && !isBlindCategory(p.category))
+      .map(p => ({ name: p.name, price: p.price, img: p.image_url, type: "other" }));
 
     render(blockProducts, "blockList");
     render(blindProducts, "blindList");
+    render(otherProducts, "otherList");
+
+    // FIX 4: Show helpful message if a section is empty (so you know it loaded)
+    console.log(`Loaded: ${blockProducts.length} block, ${blindProducts.length} blind, ${otherProducts.length} other products`);
   } catch (error) {
     console.error("Failed to load products:", error);
   }
@@ -142,6 +166,11 @@ async function loadProducts() {
 function render(list, id) {
   const box = document.getElementById(id);
   box.innerHTML = "";
+
+  if (list.length === 0) {
+    box.innerHTML = '<p style="color:#aaa;padding:10px;">No products available.</p>';
+    return;
+  }
 
   list.forEach(p => {
     const card = document.createElement("div");
