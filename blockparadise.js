@@ -1,5 +1,57 @@
 let cart = [];
 
+// Keep-alive ping: wake Render free-tier backend as early as possible
+(function keepAlivePing() {
+  try {
+    // fire-and-forget fetch to warm the backend; use no-cors so network request still occurs
+    fetch('https://block-paradise-backend.onrender.com/api/v1/products?limit=1', { mode: 'no-cors' })
+      .catch(() => { });
+  } catch (e) { /* ignore */ }
+})();
+
+// --- Loading skeletons + spinner helpers ---
+function createSkeletonCard() {
+  const card = document.createElement('div');
+  card.className = 'card skeleton-card';
+  card.innerHTML = `
+    <div class="image"><div class="skeleton skeleton-image"></div></div>
+    <div class="name"><div class="skeleton skeleton-line" style="width:70%;height:14px"></div></div>
+    <div class="price"><div class="skeleton skeleton-line" style="width:40%;height:14px"></div></div>
+  `;
+  return card;
+}
+
+function showSkeletons(count = 6) {
+  ['blockList', 'blindList', 'otherList'].forEach(id => {
+    const container = document.getElementById(id);
+    if (!container) return;
+    container.innerHTML = '';
+    for (let i = 0; i < count; i++) container.appendChild(createSkeletonCard());
+  });
+}
+
+function showSectionSpinner(message = 'Loading products…') {
+  ['blockList', 'blindList', 'otherList'].forEach(id => {
+    const container = document.getElementById(id);
+    if (!container) return;
+    // ensure only one spinner
+    if (container.querySelector('.section-loading')) return;
+    const s = document.createElement('div');
+    s.className = 'section-loading';
+    s.textContent = message;
+    container.appendChild(s);
+  });
+}
+
+function removeSectionSpinner() {
+  ['blockList', 'blindList', 'otherList'].forEach(id => {
+    const container = document.getElementById(id);
+    if (!container) return;
+    const s = container.querySelectorAll('.section-loading');
+    s.forEach(n => n.remove());
+  });
+}
+
 function updateCartUI() {
   document.querySelector(".cart-btn").innerText = "Cart (" + cart.length + ")";
 }
@@ -110,13 +162,20 @@ function modalBuyNow() {
 async function loadProducts() {
   try {
     const API = "https://block-paradise-backend.onrender.com/api/v1";
-    // FIX 1: Pass active=true so only active products are shown to customers
     const url = `${API}/products?limit=100&active=true`;
+
+    // show loading UI
+    showSectionSpinner();
 
     const response = await fetch(url);
     if (!response.ok) {
       const text = await response.text();
       console.error(`Product fetch failed (${response.status}):`, text || response.statusText);
+      removeSectionSpinner();
+      ['blockList', 'blindList', 'otherList'].forEach(id => {
+        const box = document.getElementById(id);
+        if (box) box.innerHTML = '<p style="color:#ff5f3b;padding:10px;">Could not load products. Please refresh.</p>';
+      });
       return;
     }
 
@@ -155,10 +214,18 @@ async function loadProducts() {
     render(blindProducts, "blindList");
     render(otherProducts, "otherList");
 
+    // remove loading UI
+    removeSectionSpinner();
+
     // FIX 4: Show helpful message if a section is empty (so you know it loaded)
     console.log(`Loaded: ${blockProducts.length} block, ${blindProducts.length} blind, ${otherProducts.length} other products`);
   } catch (error) {
     console.error("Failed to load products:", error);
+    removeSectionSpinner();
+    ['blockList', 'blindList', 'otherList'].forEach(id => {
+      const box = document.getElementById(id);
+      if (box) box.innerHTML = '<p style="color:#ff5f3b;padding:10px;">Could not load products. Please refresh.</p>';
+    });
   }
 }
 
@@ -176,7 +243,7 @@ function render(list, id) {
     const card = document.createElement("div");
     card.className = "card";
     card.innerHTML = `
-      <div class="image" style="cursor:pointer;"><img src="${p.img}"></div>
+      <div class="image" style="cursor:pointer;"><img src="${p.img}" loading="lazy" alt="${p.name}"></div>
       <div class="name" style="cursor:pointer;">${p.name}</div>
       <div class="price">$${p.price}</div>
       <div class="btn-row">
@@ -211,4 +278,6 @@ function render(list, id) {
 
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
 
+// Insert skeleton placeholders immediately so users see a loading state
+showSkeletons();
 loadProducts();

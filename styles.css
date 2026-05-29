@@ -241,6 +241,47 @@ body {
     color: white;
 }
 
+/* Skeleton loading styles */
+.skeleton {
+    background: linear-gradient(90deg, #e0e0e0 25%, #f5f5f5 50%, #e0e0e0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.2s linear infinite;
+    border-radius: 8px;
+}
+
+.skeleton-image {
+    height: 100%;
+    width: 100%;
+    display: block;
+}
+
+.skeleton-line {
+    height: 12px;
+    display: block;
+    border-radius: 6px;
+}
+
+.skeleton-card {
+    padding: 10px;
+}
+
+.section-loading {
+    text-align: center;
+    color: #666;
+    padding: 12px;
+    font-style: italic;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
 /* ── PRODUCT DETAIL MODAL ── */
 #productModal {
     display: none;
