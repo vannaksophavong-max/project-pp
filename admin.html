@@ -367,9 +367,12 @@
       width: 100%;
       max-width: 420px;
       max-height: 90vh;
-      overflow-y: auto;
       display: flex;
       flex-direction: column;
+    }
+
+    .modal>*:not(.modal-btns) {
+      overflow-y: auto;
     }
 
     .modal h3 {
@@ -408,12 +411,9 @@
     .modal-btns {
       display: flex;
       gap: 10px;
-      margin-top: 6px;
-      position: sticky;
-      bottom: 0;
-      background: #e0e5ec;
-      padding-top: 10px;
-      padding-bottom: 10px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #d0d5db;
     }
 
     .modal-btns button {
