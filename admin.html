@@ -718,6 +718,10 @@
       <textarea id="productDesc" placeholder="Product description"></textarea>
       <label>Image URL</label>
       <input type="url" id="productImage" placeholder="https://..." />
+      <label>Image File</label>
+      <input type="file" id="productImageFile" accept="image/*" />
+      <small style="display:block;margin-top:4px;color:#555;font-size:13px;">Upload an image from your device, or paste
+        a public image URL above.</small>
       <label>Status</label>
       <select id="productStatus">
         <option value="true">Active</option>
@@ -1101,6 +1105,7 @@
       document.getElementById('productCategory').value = category || '';
       document.getElementById('productDesc').value = desc || '';
       document.getElementById('productImage').value = image || '';
+      document.getElementById('productImageFile').value = '';
       document.getElementById('productStatus').value = String(active);
       document.getElementById('productModal').classList.add('open');
     };
@@ -1114,12 +1119,33 @@
       document.getElementById('productCategory').value = '';
       document.getElementById('productDesc').value = '';
       document.getElementById('productImage').value = '';
+      document.getElementById('productImageFile').value = '';
       document.getElementById('productStatus').value = 'true';
       document.getElementById('productModal').classList.add('open');
     });
 
     document.getElementById('cancelProduct').addEventListener('click', () => {
       document.getElementById('productModal').classList.remove('open');
+    });
+
+    document.getElementById('productImageFile').addEventListener('change', (event) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        toast('❌ Please select an image file.');
+        event.target.value = '';
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        document.getElementById('productImage').value = reader.result || '';
+        toast('✅ Image loaded from device.');
+      };
+      reader.onerror = () => {
+        toast('❌ Failed to read the image file.');
+      };
+      reader.readAsDataURL(file);
     });
 
     document.getElementById('saveProduct').addEventListener('click', async () => {
