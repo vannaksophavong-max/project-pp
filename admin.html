@@ -361,7 +361,7 @@
 
     .modal {
       background: #e0e5ec;
-      padding: 28px;
+      padding: 0;
       border-radius: 20px;
       box-shadow: 10px 10px 30px #c2c8d0, -10px -10px 30px #ffffff;
       width: 100%;
@@ -369,15 +369,27 @@
       max-height: 90vh;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
     }
 
-    .modal>*:not(.modal-btns) {
-      overflow-y: auto;
-    }
-
-    .modal h3 {
-      margin: 0 0 18px;
+    .modal>h3 {
+      padding: 28px 28px 12px 28px;
+      margin: 0;
       font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .modal-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 28px 20px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .modal-content>* {
+      flex-shrink: 0;
     }
 
     .modal label {
@@ -386,6 +398,8 @@
       font-weight: 600;
       color: #555;
       margin-bottom: 4px;
+      margin-top: 0;
+      padding: 0;
     }
 
     .modal input,
@@ -408,12 +422,25 @@
       resize: vertical;
     }
 
+    .modal-content small {
+      display: block;
+      margin-top: 4px;
+      margin-bottom: 12px;
+      color: #555;
+      font-size: 13px;
+    }
+
+    .modal h3 {
+      font-size: 18px;
+    }
+
     .modal-btns {
       display: flex;
       gap: 10px;
-      margin-top: 16px;
-      padding-top: 16px;
+      padding: 16px 28px 28px 28px;
+      background: #e0e5ec;
       border-top: 1px solid #d0d5db;
+      flex-shrink: 0;
     }
 
     .modal-btns button {
@@ -686,17 +713,19 @@
   <div class="modal-bg" id="userEditModal">
     <div class="modal">
       <h3>Edit User</h3>
-      <label>Username</label>
-      <input type="text" id="editUsername" placeholder="Username" />
-      <label>Email</label>
-      <input type="email" id="editEmail" placeholder="Email" />
-      <label>Role</label>
-      <select id="editRole">
-        <option value="false">User</option>
-        <option value="true">Admin</option>
-      </select>
-      <label>New Password (optional)</label>
-      <input type="password" id="editPassword" placeholder="New password" />
+      <div class="modal-content">
+        <label>Username</label>
+        <input type="text" id="editUsername" placeholder="Username" />
+        <label>Email</label>
+        <input type="email" id="editEmail" placeholder="Email" />
+        <label>Role</label>
+        <select id="editRole">
+          <option value="false">User</option>
+          <option value="true">Admin</option>
+        </select>
+        <label>New Password (optional)</label>
+        <input type="password" id="editPassword" placeholder="New password" />
+      </div>
       <div class="modal-btns">
         <button class="btn-cancel" id="cancelUserEdit">Cancel</button>
         <button class="btn-save" id="saveUserEdit">Save</button>
@@ -708,32 +737,35 @@
   <div class="modal-bg" id="productModal">
     <div class="modal">
       <h3 id="productModalTitle">Add Product</h3>
-      <label>Name *</label>
-      <input type="text" id="productName" placeholder="Product name" />
-      <label>Price *</label>
-      <input type="number" id="productPrice" placeholder="0.00" step="0.01" min="0" />
-      <label>Stock</label>
-      <input type="number" id="productStock" placeholder="0" min="0" />
-      <label>Category</label>
-      <select id="productCategory">
-        <option value="">Select category</option>
-        <option value="Block paradise">Block paradise</option>
-        <option value="Blind Box">Blind Box</option>
-        <option value="Other Products">Other Products</option>
-      </select>
-      <label>Description</label>
-      <textarea id="productDesc" placeholder="Product description"></textarea>
-      <label>Image URL</label>
-      <input type="url" id="productImage" placeholder="https://..." />
-      <label>Image File</label>
-      <input type="file" id="productImageFile" accept="image/*" />
-      <small style="display:block;margin-top:4px;color:#555;font-size:13px;">Upload an image from your device, or paste
-        a public image URL above.</small>
-      <label>Status</label>
-      <select id="productStatus">
-        <option value="true">Active</option>
-        <option value="false">Inactive</option>
-      </select>
+      <div class="modal-content">
+        <label>Name *</label>
+        <input type="text" id="productName" placeholder="Product name" />
+        <label>Price *</label>
+        <input type="number" id="productPrice" placeholder="0.00" step="0.01" min="0" />
+        <label>Stock</label>
+        <input type="number" id="productStock" placeholder="0" min="0" />
+        <label>Category</label>
+        <select id="productCategory">
+          <option value="">Select category</option>
+          <option value="Block paradise">Block paradise</option>
+          <option value="Blind Box">Blind Box</option>
+          <option value="Other Products">Other Products</option>
+        </select>
+        <label>Description</label>
+        <textarea id="productDesc" placeholder="Product description"></textarea>
+        <label>Image URL</label>
+        <input type="url" id="productImage" placeholder="https://..." />
+        <label>Image File</label>
+        <input type="file" id="productImageFile" accept="image/*" />
+        <small style="display:block;margin-top:4px;color:#555;font-size:13px;">Upload an image from your device, or
+          paste
+          a public image URL above.</small>
+        <label>Status</label>
+        <select id="productStatus">
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
+        </select>
+      </div>
       <div class="modal-btns">
         <button class="btn-cancel" id="cancelProduct">Cancel</button>
         <button class="btn-save" id="saveProduct">Save</button>
@@ -745,27 +777,29 @@
   <div class="modal-bg" id="paymentModal">
     <div class="modal">
       <h3 id="paymentModalTitle">Add Payment</h3>
-      <label>User ID *</label>
-      <input type="text" id="paymentUserId" placeholder="User UUID" />
-      <label>Product ID</label>
-      <input type="text" id="paymentProductId" placeholder="Product UUID (optional)" />
-      <label>Amount *</label>
-      <input type="number" id="paymentAmount" placeholder="0.00" step="0.01" min="0" />
-      <label>Currency</label>
-      <input type="text" id="paymentCurrency" placeholder="USD" maxlength="3" />
-      <label>Status</label>
-      <select id="paymentStatus">
-        <option value="pending">Pending</option>
-        <option value="completed">Completed</option>
-        <option value="failed">Failed</option>
-        <option value="refunded">Refunded</option>
-      </select>
-      <label>Payment Method</label>
-      <input type="text" id="paymentMethod" placeholder="e.g., QR, Cash, Bank" />
-      <label>Reference</label>
-      <input type="text" id="paymentReference" placeholder="Payment reference" />
-      <label>Notes</label>
-      <textarea id="paymentNotes" placeholder="Additional notes"></textarea>
+      <div class="modal-content">
+        <label>User ID *</label>
+        <input type="text" id="paymentUserId" placeholder="User UUID" />
+        <label>Product ID</label>
+        <input type="text" id="paymentProductId" placeholder="Product UUID (optional)" />
+        <label>Amount *</label>
+        <input type="number" id="paymentAmount" placeholder="0.00" step="0.01" min="0" />
+        <label>Currency</label>
+        <input type="text" id="paymentCurrency" placeholder="USD" maxlength="3" />
+        <label>Status</label>
+        <select id="paymentStatus">
+          <option value="pending">Pending</option>
+          <option value="completed">Completed</option>
+          <option value="failed">Failed</option>
+          <option value="refunded">Refunded</option>
+        </select>
+        <label>Payment Method</label>
+        <input type="text" id="paymentMethod" placeholder="e.g., QR, Cash, Bank" />
+        <label>Reference</label>
+        <input type="text" id="paymentReference" placeholder="Payment reference" />
+        <label>Notes</label>
+        <textarea id="paymentNotes" placeholder="Additional notes"></textarea>
+      </div>
       <div class="modal-btns">
         <button class="btn-cancel" id="cancelPayment">Cancel</button>
         <button class="btn-save" id="savePayment">Save</button>
