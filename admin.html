@@ -628,6 +628,9 @@
             <input class="search-box" id="productSearch" placeholder="🔍  Search products…" />
             <select class="filter-select" id="productCategoryFilter">
               <option value="">All Categories</option>
+              <option value="Block paradise">Block paradise</option>
+              <option value="Blind Box">Blind Box</option>
+              <option value="Other Products">Other Products</option>
             </select>
             <select class="filter-select" id="productActiveFilter">
               <option value="">All Status</option>
@@ -757,6 +760,7 @@
         <input type="url" id="productImage" placeholder="https://..." />
         <label>Image File</label>
         <input type="file" id="productImageFile" accept="image/*" />
+        <div id="productImagePreview" style="margin-top:10px;max-width:180px;"></div>
         <small style="display:block;margin-top:4px;color:#555;font-size:13px;">Upload an image from your device, or
           paste
           a public image URL above.</small>
@@ -1072,6 +1076,7 @@
     let productSearchTimer = null;
     let editingProductId = null;
     let productCategories = [];
+    const productDataMap = new Map();
 
     async function loadProducts(page = 1) {
       productsLoaded = true;
@@ -1098,16 +1103,8 @@
         document.getElementById('productPrevBtn').disabled = productPage <= 1;
         document.getElementById('productNextBtn').disabled = productPage >= productTotal;
 
-        // Update category filter
-        const cats = [...new Set(data.products?.map(p => p.category).filter(Boolean))];
-        if (cats.length > 0) {
-          productCategories = cats;
-          const sel = document.getElementById('productCategoryFilter');
-          const current = sel.value;
-          sel.innerHTML = '<option value="">All Categories</option>' +
-            cats.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
-          sel.value = current;
-        }
+        productDataMap.clear();
+        data.products?.forEach(p => productDataMap.set(p.id, p));
 
         if (!data.products || data.products.length === 0) {
           tbody.innerHTML = '<tr><td colspan="7" class="empty">No products found.</td></tr>';
@@ -1126,8 +1123,8 @@
           </span></td>
           <td>
             <div class="action-row">
-              <button class="btn-edit" onclick="openProductEdit('${p.id}','${esc(p.name)}',${p.price},${p.stock},'${esc(p.category)}','${esc(p.description)}','${esc(p.image_url)}',${p.is_active})">Edit</button>
-              <button class="btn-delete" onclick="deleteProduct('${p.id}','${esc(p.name)}')">Delete</button>
+              <button class="btn-edit" onclick="openProductEdit('${p.id}')">Edit</button>
+              <button class="btn-delete" onclick="deleteProduct('${p.id}')">Delete</button>
             </div>
           </td>
         </tr>
@@ -1137,17 +1134,23 @@
       }
     }
 
-    window.openProductEdit = function (id, name, price, stock, category, desc, image, active) {
+    window.openProductEdit = function (id) {
+      const p = productDataMap.get(id);
+      if (!p) {
+        toast('❌ Product data not found');
+        return;
+      }
       editingProductId = id;
       document.getElementById('productModalTitle').textContent = 'Edit Product';
-      document.getElementById('productName').value = name;
-      document.getElementById('productPrice').value = price;
-      document.getElementById('productStock').value = stock;
-      document.getElementById('productCategory').value = category || '';
-      document.getElementById('productDesc').value = desc || '';
-      document.getElementById('productImage').value = image || '';
+      document.getElementById('productName').value = p.name || '';
+      document.getElementById('productPrice').value = p.price;
+      document.getElementById('productStock').value = p.stock;
+      document.getElementById('productCategory').value = p.category || '';
+      document.getElementById('productDesc').value = p.description || '';
+      document.getElementById('productImage').value = p.image_url || '';
       document.getElementById('productImageFile').value = '';
-      document.getElementById('productStatus').value = String(active);
+      document.getElementById('productImagePreview').innerHTML = p.image_url ? `<img src="${esc(p.image_url)}" alt="Preview" class="image-preview-img">` : '';
+      document.getElementById('productStatus').value = String(p.is_active);
       document.getElementById('productModal').classList.add('open');
     };
 
@@ -1161,8 +1164,7 @@
       document.getElementById('productDesc').value = '';
       document.getElementById('productImage').value = '';
       document.getElementById('productImageFile').value = '';
-      document.getElementById('productStatus').value = 'true';
-      document.getElementById('productModal').classList.add('open');
+      document.getElementById('productImagePreview').innerHTML = '';
     });
 
     document.getElementById('cancelProduct').addEventListener('click', () => {
@@ -1193,18 +1195,20 @@
       const name = document.getElementById('productName').value.trim();
       const price = parseFloat(document.getElementById('productPrice').value);
       const category = document.getElementById('productCategory').value.trim();
+      const imageUrl = document.getElementById('productImage').value.trim();
 
       if (!name) { toast('❌ Name is required'); return; }
       if (isNaN(price) || price < 0) { toast('❌ Valid price is required'); return; }
       if (!category) { toast('❌ Category is required'); return; }
+      if (imageUrl && imageUrl.startsWith('data:')) { toast('❌ Please paste a public URL instead'); return; }
 
       const body = {
         name: name,
-        price: price,  // ← already parsed as float on line 1122, just use it!
+        price: price,
         stock: parseInt(document.getElementById('productStock').value, 10) || 0,
-        category: document.getElementById('productCategory').value.trim() || undefined,
+        category: category || undefined,
         description: document.getElementById('productDesc').value.trim() || undefined,
-        image_url: document.getElementById('productImage').value.trim() || undefined,
+        image_url: imageUrl || undefined,
         is_active: document.getElementById('productStatus').value === 'true',
       };
 
@@ -1255,8 +1259,9 @@
       }
     });
 
-    window.deleteProduct = async function (id, name) {
-      if (!confirm(`Delete product "${name}"? This cannot be undone.`)) return;
+    window.deleteProduct = async function (id) {
+      const productName = productDataMap.get(id)?.name || 'this product';
+      if (!confirm(`Delete product "${productName}"? This cannot be undone.`)) return;
       try {
         const res = await fetch(`${API}/admin/products/${id}`, {
           method: 'DELETE', headers: authHeaders()
