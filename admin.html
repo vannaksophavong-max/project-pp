@@ -1165,6 +1165,8 @@
       document.getElementById('productImage').value = '';
       document.getElementById('productImageFile').value = '';
       document.getElementById('productImagePreview').innerHTML = '';
+      document.getElementById('productStatus').value = 'true';
+      document.getElementById('productModal').classList.add('open');
     });
 
     document.getElementById('cancelProduct').addEventListener('click', () => {
@@ -1182,8 +1184,11 @@
 
       const reader = new FileReader();
       reader.onload = () => {
-        document.getElementById('productImage').value = reader.result || '';
-        toast('✅ Image loaded from device.');
+        const preview = document.getElementById('productImagePreview');
+        if (preview) {
+          preview.innerHTML = `<img src="${esc(reader.result || '')}" alt="Image preview" class="image-preview-img">`;
+        }
+        toast('⚠️ Please use a public image URL instead of uploading a file. Paste the image URL into the field above.');
       };
       reader.onerror = () => {
         toast('❌ Failed to read the image file.');
