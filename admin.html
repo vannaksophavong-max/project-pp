@@ -430,6 +430,14 @@
       font-size: 13px;
     }
 
+    .image-preview-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+      object-fit: contain;
+    }
+
     .modal h3 {
       font-size: 18px;
     }
@@ -757,13 +765,12 @@
         <label>Description</label>
         <textarea id="productDesc" placeholder="Product description"></textarea>
         <label>Image URL</label>
-        <input type="url" id="productImage" placeholder="https://..." />
+        <input type="url" id="productImage" placeholder="https://... or data:image/..." />
         <label>Image File</label>
         <input type="file" id="productImageFile" accept="image/*" />
-        <div id="productImagePreview" style="margin-top:10px;max-width:180px;"></div>
-        <small style="display:block;margin-top:4px;color:#555;font-size:13px;">Upload an image from your device, or
-          paste
-          a public image URL above.</small>
+        <div id="productImagePreview" style="margin-top:10px;max-width:100%;"></div>
+        <small style="display:block;margin-top:4px;color:#555;font-size:13px;">Choose either a public image URL or
+          upload a file from your device. The preview shows the selected image.</small>
         <label>Status</label>
         <select id="productStatus">
           <option value="true">Active</option>
@@ -1188,7 +1195,8 @@
         if (preview) {
           preview.innerHTML = `<img src="${esc(reader.result || '')}" alt="Image preview" class="image-preview-img">`;
         }
-        toast('⚠️ Please use a public image URL instead of uploading a file. Paste the image URL into the field above.');
+        document.getElementById('productImage').value = reader.result || '';
+        toast('✅ File selected. You can also paste a public image URL instead if you prefer.');
       };
       reader.onerror = () => {
         toast('❌ Failed to read the image file.');
@@ -1205,7 +1213,6 @@
       if (!name) { toast('❌ Name is required'); return; }
       if (isNaN(price) || price < 0) { toast('❌ Valid price is required'); return; }
       if (!category) { toast('❌ Category is required'); return; }
-      if (imageUrl && imageUrl.startsWith('data:')) { toast('❌ Please paste a public URL instead'); return; }
 
       const body = {
         name: name,
