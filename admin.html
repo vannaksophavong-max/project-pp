@@ -1192,12 +1192,31 @@
 
       const reader = new FileReader();
       reader.onload = () => {
-        const preview = document.getElementById('productImagePreview');
-        if (preview) {
-          preview.innerHTML = `<img src="${esc(reader.result || '')}" alt="Image preview" class="image-preview-img">`;
-        }
-        document.getElementById('productImage').value = reader.result || '';
-        toast('✅ File selected. You can also paste a public image URL instead if you prefer.');
+        const img = new Image();
+        img.onload = () => {
+          // Compress & resize to max 800px wide/tall, JPEG quality 0.75
+          const MAX = 800;
+          let { width, height } = img;
+          if (width > MAX || height > MAX) {
+            if (width > height) { height = Math.round(height * MAX / width); width = MAX; }
+            else { width = Math.round(width * MAX / height); height = MAX; }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+          const compressed = canvas.toDataURL('image/jpeg', 0.75);
+
+          const preview = document.getElementById('productImagePreview');
+          if (preview) {
+            preview.innerHTML = `<img src="${esc(compressed)}" alt="Image preview" class="image-preview-img">`;
+          }
+          document.getElementById('productImage').value = compressed;
+          const kb = Math.round(compressed.length * 0.75 / 1024);
+          toast(`✅ File selected & compressed (~${kb} KB). You can also paste a public image URL instead if you prefer.`);
+        };
+        img.onerror = () => toast('❌ Failed to process the image file.');
+        img.src = reader.result;
       };
       reader.onerror = () => {
         toast('❌ Failed to read the image file.');
