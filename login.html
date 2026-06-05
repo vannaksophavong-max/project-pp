@@ -83,10 +83,10 @@
       const password = loginForm.querySelector('input[type="password"]').value;
       const result = await login(email, password);
       if (result.token) {
-        alert("Login successful! Welcome " + result.user.username);
+        // removed welcome alert
         window.location.href = "blockparadise.html";
       } else {
-        alert(result.message || "Login failed");
+        alert("Invalid email or password.");
       }
     });
 
