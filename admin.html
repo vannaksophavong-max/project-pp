@@ -756,12 +756,13 @@
         <label>Stock</label>
         <input type="number" id="productStock" placeholder="0" min="0" />
         <label>Category</label>
-        <select id="productCategory">
-          <option value="">Select category</option>
-          <option value="Block paradise">Block paradise</option>
-          <option value="Blind Box">Blind Box</option>
-          <option value="Other Products">Other Products</option>
-        </select>
+        <input list="productCategoryOptions" type="text" id="productCategory"
+          placeholder="Block paradise, Blind Box, Other Products, or type your own" />
+        <datalist id="productCategoryOptions">
+          <option value="Block paradise"></option>
+          <option value="Blind Box"></option>
+          <option value="Other Products"></option>
+        </datalist>
         <label>Description</label>
         <textarea id="productDesc" placeholder="Product description"></textarea>
         <label>Image URL</label>
