@@ -1,0 +1,14 @@
+.content {
+    width: min(1200px, 100%);
+    margin: 0 auto;
+    padding: 100px 24px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+@media (max-width: 640px) {
+    .content {
+        padding: 90px 16px 32px;
+    }
+}

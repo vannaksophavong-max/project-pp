@@ -1,0 +1,83 @@
+.page {
+    display: grid;
+    gap: 24px;
+}
+
+.card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+}
+
+.card img {
+    width: 100%;
+    border-radius: var(--radius);
+    object-fit: cover;
+    min-height: 420px;
+}
+
+.details {
+    display: grid;
+    gap: 16px;
+}
+
+.category {
+    text-transform: uppercase;
+    color: var(--primary);
+    letter-spacing: 0.08em;
+    font-size: 12px;
+}
+
+.price {
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.stock {
+    color: var(--muted);
+}
+
+.description {
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.actions {
+    display: grid;
+    gap: 16px;
+}
+
+label {
+    display: grid;
+    gap: 10px;
+}
+
+input[type='number'] {
+    width: 100px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface-strong);
+}
+
+.button {
+    border: none;
+    background: var(--primary);
+    color: white;
+    padding: 14px 18px;
+    border-radius: 14px;
+}
+
+.loading,
+.error {
+    padding: 24px;
+    border-radius: var(--radius);
+    background: var(--surface);
+}
+
+@media (max-width: 900px) {
+    .card {
+        grid-template-columns: 1fr;
+    }
+}

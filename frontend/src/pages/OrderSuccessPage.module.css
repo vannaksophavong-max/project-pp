@@ -1,0 +1,31 @@
+.page {
+    display: grid;
+    place-items: center;
+    min-height: 70vh;
+}
+
+.card {
+    width: min(460px, 100%);
+    padding: 32px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    text-align: center;
+    display: grid;
+    gap: 18px;
+}
+
+.ref {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.button {
+    display: inline-flex;
+    justify-content: center;
+    padding: 14px 18px;
+    border-radius: 14px;
+    color: white;
+    background: var(--primary);
+    text-decoration: none;
+}

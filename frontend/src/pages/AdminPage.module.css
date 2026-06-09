@@ -1,0 +1,14 @@
+.page {
+    display: grid;
+    gap: 20px;
+}
+
+.page h1 {
+    margin: 0;
+}
+
+.page p {
+    max-width: 720px;
+    line-height: 1.7;
+    color: var(--muted);
+}

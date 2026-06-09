@@ -1,0 +1,15 @@
+.page {
+    display: grid;
+    place-items: center;
+    min-height: 70vh;
+    gap: 18px;
+    text-align: center;
+}
+
+.button {
+    padding: 14px 18px;
+    border-radius: 14px;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+}

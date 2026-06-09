@@ -1,0 +1,36 @@
+.page {
+    display: grid;
+    gap: 20px;
+}
+
+.list {
+    display: grid;
+    gap: 16px;
+}
+
+.order {
+    padding: 20px;
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.status {
+    display: inline-flex;
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--primary);
+    background: var(--primary-soft);
+}
+
+.message,
+.error {
+    padding: 24px;
+    background: var(--surface);
+    border-radius: var(--radius);
+}

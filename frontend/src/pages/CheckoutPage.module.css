@@ -1,0 +1,78 @@
+.page {
+    display: grid;
+    gap: 24px;
+}
+
+.content {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1.5fr 1fr;
+}
+
+.review,
+.form {
+    padding: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    display: grid;
+    gap: 18px;
+}
+
+.items {
+    display: grid;
+    gap: 12px;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    color: var(--muted);
+}
+
+.total {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.radioLabel {
+    display: grid;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+}
+
+textarea {
+    min-height: 120px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    resize: vertical;
+}
+
+.qr {
+    width: 100%;
+    border-radius: var(--radius);
+}
+
+.submit {
+    border: none;
+    padding: 14px;
+    border-radius: 14px;
+    background: var(--primary);
+    color: white;
+}
+
+.empty {
+    padding: 48px 24px;
+    background: var(--surface);
+    border-radius: var(--radius);
+    text-align: center;
+}
+
+@media (max-width: 900px) {
+    .content {
+        grid-template-columns: 1fr;
+    }
+}
