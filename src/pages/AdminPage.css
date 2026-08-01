@@ -192,6 +192,40 @@
   margin: 0 auto;
 }
 
+.admin__tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #2C2542;
+  padding-bottom: 0;
+}
+
+.admin__tab {
+  padding: 11px 22px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #8A82A8;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.admin__tab:hover {
+  color: white;
+  background: #241E38;
+}
+
+.admin__tab--active {
+  color: var(--brick-yellow);
+  border-bottom-color: var(--brick-yellow);
+}
+
+.admin__tab--active:hover {
+  background: transparent;
+}
+
 .admin__stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

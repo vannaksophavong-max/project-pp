@@ -92,6 +92,7 @@ function AdminDashboard({ username, logout }) {
 
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
+  const [activeTab, setActiveTab] = useState("products");
   const [modalOpen, setModalOpen] = useState(false);
   const [editId, setEditId] = useState(null);
   const [form, setForm] = useState(emptyForm);
@@ -200,80 +201,98 @@ function AdminDashboard({ username, logout }) {
       </div>
 
       <div className="admin__main">
-        <div className="admin__stats">
-          <StatCard icon="📦" label="Products total" value={stats.total} />
-          <StatCard icon="🌸" label="Block Paradise" value={stats.block} />
-          <StatCard icon="🎁" label="Blind box" value={stats.blind} />
-          <StatCard icon="👤" label="Logged in as" value={username} small />
-        </div>
+        <nav className="admin__tabs">
+          <button
+            type="button"
+            className={`admin__tab ${activeTab === "products" ? "admin__tab--active" : ""}`}
+            onClick={() => setActiveTab("products")}
+          >
+            📦 Products
+          </button>
+          <button
+            type="button"
+            className={`admin__tab ${activeTab === "users" ? "admin__tab--active" : ""}`}
+            onClick={() => setActiveTab("users")}
+          >
+            👥 Users
+          </button>
+        </nav>
 
-        <div className="admin__toolbar">
-          <div className="admin__toolbar-left">
-            <h2 className="admin__section-label">Product list</h2>
-            <input
-              className="admin__search"
-              placeholder="🔍 Search product..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <select className="admin__filter" value={filter} onChange={(e) => setFilter(e.target.value)}>
-              <option value="all">All types</option>
-              <option value="block">🌸 Block</option>
-              <option value="blind">🎁 Blind Box</option>
-            </select>
-          </div>
-          <button className="admin__add-btn" onClick={openAdd}>+ Add product</button>
-        </div>
+        {activeTab === "products" && (
+          <>
+            <div className="admin__stats">
+              <StatCard icon="📦" label="Products total" value={stats.total} />
+              <StatCard icon="🌸" label="Block Paradise" value={stats.block} />
+              <StatCard icon="🎁" label="Blind box" value={stats.blind} />
+              <StatCard icon="👤" label="Logged in as" value={username} small />
+            </div>
 
-        <div className="admin__table-wrap">
-          <table className="admin__table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Type</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.length === 0 ? (
-                <tr><td colSpan={6} className="admin__empty-row">😔 No products found</td></tr>
-              ) : (
-                filtered.map((p, i) => (
-                  <tr key={p.id}>
-                    <td className="admin__idx">{i + 1}</td>
-                    <td>
-                      <img
-                        className="admin__thumb"
-                        src={p.img}
-                        alt=""
-                        onError={(e) => { e.currentTarget.style.background = "var(--surface-muted)"; e.currentTarget.style.opacity = 0.3; }}
-                      />
-                    </td>
-                    <td className="admin__name">{p.name}</td>
-                    <td><span className="admin__price-tag">${p.price}</span></td>
-                    <td>
-                      <span className={`admin__type admin__type--${p.type}`}>
-                        {p.type === "block" ? "🌸 Block" : "🎁 Blind Box"}
-                      </span>
-                    </td>
-                    <td>
-                      <button className="admin__edit-btn" onClick={() => openEdit(p)}>Edit</button>
-                      <button className="admin__del-btn" onClick={() => handleDelete(p.id)}>Delete</button>
-                    </td>
+            <div className="admin__toolbar">
+              <div className="admin__toolbar-left">
+                <h2 className="admin__section-label">Product list</h2>
+                <input
+                  className="admin__search"
+                  placeholder="🔍 Search product..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+                <select className="admin__filter" value={filter} onChange={(e) => setFilter(e.target.value)}>
+                  <option value="all">All types</option>
+                  <option value="block">🌸 Block</option>
+                  <option value="blind">🎁 Blind Box</option>
+                </select>
+              </div>
+              <button className="admin__add-btn" onClick={openAdd}>+ Add product</button>
+            </div>
+
+            <div className="admin__table-wrap">
+              <table className="admin__table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Type</th>
+                    <th>Actions</th>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                </thead>
+                <tbody>
+                  {filtered.length === 0 ? (
+                    <tr><td colSpan={6} className="admin__empty-row">😔 No products found</td></tr>
+                  ) : (
+                    filtered.map((p, i) => (
+                      <tr key={p.id}>
+                        <td className="admin__idx">{i + 1}</td>
+                        <td>
+                          <img
+                            className="admin__thumb"
+                            src={p.img}
+                            alt=""
+                            onError={(e) => { e.currentTarget.style.background = "var(--surface-muted)"; e.currentTarget.style.opacity = 0.3; }}
+                          />
+                        </td>
+                        <td className="admin__name">{p.name}</td>
+                        <td><span className="admin__price-tag">${p.price}</span></td>
+                        <td>
+                          <span className={`admin__type admin__type--${p.type}`}>
+                            {p.type === "block" ? "🌸 Block" : "🎁 Blind Box"}
+                          </span>
+                        </td>
+                        <td>
+                          <button className="admin__edit-btn" onClick={() => openEdit(p)}>Edit</button>
+                          <button className="admin__del-btn" onClick={() => handleDelete(p.id)}>Delete</button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
 
-        <div className="admin__toolbar" style={{ marginTop: 34 }}>
-          <h2 className="admin__section-label">User management</h2>
-        </div>
-        <UsersPanel />
+        {activeTab === "users" && <UsersPanel />}
       </div>
 
       {modalOpen && (
