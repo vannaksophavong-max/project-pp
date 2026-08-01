@@ -65,6 +65,42 @@ export function adminDeleteProduct(id) {
   return request(`/admin/products/${id}`, { method: "DELETE", auth: true });
 }
 
+// ---- Users (admin) ----
+export function adminGetStats() {
+  return request("/admin/stats", { auth: true });
+}
+
+export function adminGetUsers({ page = 1, limit = 20, search = "" } = {}) {
+  return request(
+    `/admin/users?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`,
+    { auth: true }
+  );
+}
+
+export function adminUpdateUser(id, payload) {
+  return request(`/admin/users/${id}`, { method: "PATCH", body: payload, auth: true });
+}
+
+export function adminResetPassword(id, newPassword) {
+  return request(`/admin/users/${id}/reset-password`, {
+    method: "PATCH",
+    body: { newPassword },
+    auth: true,
+  });
+}
+
+export function adminBanUser(id) {
+  return request(`/admin/users/${id}/ban`, { method: "POST", auth: true });
+}
+
+export function adminUnbanUser(id) {
+  return request(`/admin/users/${id}/unban`, { method: "POST", auth: true });
+}
+
+export function adminDeleteUser(id) {
+  return request(`/admin/users/${id}`, { method: "DELETE", auth: true });
+}
+
 // ---- Category <-> UI type mapping ----
 // Backend stores a free-text "category" field. The old vanilla frontend used
 // fuzzy matching so "Block", "Blocks", "Block Paradise" etc. all map to "block",

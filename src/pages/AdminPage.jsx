@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useProducts } from "../context/ProductsContext.jsx";
+import UsersPanel from "../components/UsersPanel.jsx";
 import "./AdminPage.css";
 
 export default function AdminPage() {
@@ -244,6 +245,11 @@ function AdminDashboard({ username, logout }) {
             </tbody>
           </table>
         </div>
+
+        <div className="admin__toolbar" style={{ marginTop: 34 }}>
+          <h2 className="admin__section-label">User management</h2>
+        </div>
+        <UsersPanel />
       </div>
 
       {modalOpen && (
