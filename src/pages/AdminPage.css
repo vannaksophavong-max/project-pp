@@ -472,6 +472,52 @@
   border-color: var(--brick-yellow);
 }
 
+.admin__upload-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.admin__upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 11px 14px;
+  background: rgba(100, 181, 246, 0.12);
+  border: 1.5px dashed #4A4170;
+  border-radius: var(--radius-sm);
+  color: #64B5F6;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.2s;
+}
+
+.admin__upload-btn:hover {
+  background: rgba(100, 181, 246, 0.22);
+  border-color: #64B5F6;
+}
+
+.admin__upload-btn input[type="file"] {
+  display: none;
+}
+
+.admin__upload-url {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin__upload-preview {
+  display: block;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid #332B4E;
+  background: #241E38;
+}
+
 .admin__modal-row {
   display: grid;
   grid-template-columns: 1fr 1fr;

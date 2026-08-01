@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useProducts } from "../context/ProductsContext.jsx";
+import { adminUploadImage } from "../api.js";
 import UsersPanel from "../components/UsersPanel.jsx";
 import "./AdminPage.css";
 
@@ -95,6 +96,7 @@ function AdminDashboard({ username, logout }) {
   const [editId, setEditId] = useState(null);
   const [form, setForm] = useState(emptyForm);
   const [modalError, setModalError] = useState("");
+  const [uploading, setUploading] = useState(false);
   const [toast, setToast] = useState("");
 
   const filtered = useMemo(() => {
@@ -146,6 +148,28 @@ function AdminDashboard({ username, logout }) {
     }
     showToast(editId ? "Product updated" : "Product added");
     setModalOpen(false);
+  }
+
+  async function handleImageUpload(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setModalError("");
+    try {
+      const dataUrl = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+      const data = await adminUploadImage(dataUrl);
+      setForm((f) => ({ ...f, img: data.url }));
+    } catch (err) {
+      setModalError(err.message || "Failed to upload image.");
+    } finally {
+      setUploading(false);
+      e.target.value = "";
+    }
   }
 
   async function handleDelete(id) {
@@ -275,8 +299,32 @@ function AdminDashboard({ username, logout }) {
               </div>
             </div>
             <div className="admin__form-group">
-              <label>Image URL</label>
-              <input value={form.img} onChange={(e) => setForm({ ...form, img: e.target.value })} placeholder="https://..." />
+              <label>Image</label>
+              <div className="admin__upload-row">
+                <label className="admin__upload-btn">
+                  {uploading ? "Uploading..." : "📤 Upload image"}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={uploading}
+                  />
+                </label>
+                <input
+                  className="admin__upload-url"
+                  value={form.img}
+                  onChange={(e) => setForm({ ...form, img: e.target.value })}
+                  placeholder="https://... (or upload above)"
+                />
+              </div>
+              {form.img && (
+                <img
+                  className="admin__upload-preview"
+                  src={form.img}
+                  alt="Preview"
+                  onError={(e) => { e.currentTarget.style.visibility = "hidden"; }}
+                />
+              )}
             </div>
 
             {modalError && <p className="admin__modal-error">{modalError}</p>}

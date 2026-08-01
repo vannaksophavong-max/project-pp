@@ -65,6 +65,14 @@ export function adminDeleteProduct(id) {
   return request(`/admin/products/${id}`, { method: "DELETE", auth: true });
 }
 
+export function adminUploadImage(imageDataUrl) {
+  return request("/admin/products/upload-image", {
+    method: "POST",
+    body: { image: imageDataUrl },
+    auth: true,
+  });
+}
+
 // ---- Users (admin) ----
 export function adminGetStats() {
   return request("/admin/stats", { auth: true });
