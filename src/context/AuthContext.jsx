@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useCallback } from "react";
-import { registerUser, loginUser, logoutUser } from "../api.js";
+import { registerUser, loginUser, logoutUser, googleLogin, facebookLogin } from "../api.js";
 
 const AuthContext = createContext(null);
 
@@ -32,6 +32,32 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
+  const loginWithGoogle = useCallback(async (idToken) => {
+    try {
+      const data = await googleLogin(idToken);
+      localStorage.setItem("bp_token", data.token);
+      localStorage.setItem("bp_user", JSON.stringify(data.user));
+      setToken(data.token);
+      setUser(data.user);
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, message: err.message };
+    }
+  }, []);
+
+  const loginWithFacebook = useCallback(async (accessToken) => {
+    try {
+      const data = await facebookLogin(accessToken);
+      localStorage.setItem("bp_token", data.token);
+      localStorage.setItem("bp_user", JSON.stringify(data.user));
+      setToken(data.token);
+      setUser(data.user);
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, message: err.message };
+    }
+  }, []);
+
   const register = useCallback(async (name, email, password) => {
     try {
       // Backend expects a "username" (min 8 chars password enforced server-side).
@@ -54,7 +80,7 @@ export function AuthProvider({ children }) {
     setUser(null);
   }, [token]);
 
-  const value = { username, isLoggedIn, isAdmin, user, token, login, register, logout };
+  const value = { username, isLoggedIn, isAdmin, user, token, login, register, logout, loginWithGoogle, loginWithFacebook };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

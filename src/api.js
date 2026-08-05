@@ -43,6 +43,14 @@ export function loginUser(email, password) {
   return request("/users/login", { method: "POST", body: { email, password } });
 }
 
+export function googleLogin(idToken) {
+  return request("/users/oauth/google", { method: "POST", body: { token: idToken } });
+}
+
+export function facebookLogin(accessToken) {
+  return request("/users/oauth/facebook", { method: "POST", body: { token: accessToken } });
+}
+
 export function logoutUser() {
   return request("/users/logout", { method: "POST", auth: true });
 }

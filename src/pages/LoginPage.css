@@ -122,6 +122,68 @@
   cursor: default;
 }
 
+.auth__social {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.auth__divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ink-soft);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.auth__divider::before,
+.auth__divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.auth__social-google {
+  width: 100%;
+}
+
+.auth__social-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.auth__social-btn:hover {
+  border-color: var(--ink-soft);
+  background: var(--surface-muted);
+}
+
+.auth__social-btn--facebook {
+  color: #1877F2;
+  border-color: rgba(24, 119, 242, 0.4);
+}
+
+.auth__social-btn--facebook:hover {
+  border-color: #1877F2;
+  background: rgba(24, 119, 242, 0.06);
+}
+
 .auth__back {
   margin-top: 26px;
   font-size: 13px;
