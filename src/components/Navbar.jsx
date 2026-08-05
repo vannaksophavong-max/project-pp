@@ -4,7 +4,7 @@ import { useCart } from "../context/CartContext.jsx";
 import "./Navbar.css";
 
 export default function Navbar() {
-  const { isLoggedIn, username, logout } = useAuth();
+  const { isLoggedIn, isAdmin, username, logout } = useAuth();
   const { count } = useCart();
   const navigate = useNavigate();
 
@@ -40,7 +40,7 @@ export default function Navbar() {
         </a>
         {isLoggedIn ? (
           <>
-            <Link to="/admin" className="navbar__pill">Admin</Link>
+            {isAdmin && <Link to="/admin" className="navbar__pill">Admin</Link>}
             <button className="navbar__pill navbar__pill--user" onClick={handleLogout}>
               {username} · Logout
             </button>
