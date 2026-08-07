@@ -60,6 +60,27 @@ export function fetchProducts() {
   return request("/products?limit=100&active=true");
 }
 
+// ---- Cart (authenticated, per-user) ----
+export function fetchCart() {
+  return request("/cart", { auth: true });
+}
+
+export function addCartItem(productId, quantity = 1) {
+  return request("/cart/items", { method: "POST", body: { productId, quantity }, auth: true });
+}
+
+export function updateCartItem(productId, quantity) {
+  return request(`/cart/items/${productId}`, { method: "PATCH", body: { quantity }, auth: true });
+}
+
+export function removeCartItem(productId) {
+  return request(`/cart/items/${productId}`, { method: "DELETE", auth: true });
+}
+
+export function clearCartItems() {
+  return request("/cart", { method: "DELETE", auth: true });
+}
+
 // ---- Products (admin) ----
 export function adminCreateProduct(payload) {
   return request("/admin/products", { method: "POST", body: payload, auth: true });

@@ -52,11 +52,16 @@ export default function CheckoutPage() {
           <p className="checkout__empty">Your cart is empty. Go pick out a block set or blind box!</p>
         ) : (
           <ul className="checkout__list">
-            {cart.map((item, i) => (
-              <li className="checkout__item" key={i}>
-                <span className="checkout__item-name">{item.name}</span>
-                <span className="checkout__item-price">${Number(item.price).toFixed(2)}</span>
-                <button className="checkout__item-remove" onClick={() => removeFromCart(i)} aria-label={`Remove ${item.name}`}>
+            {cart.map((item) => (
+              <li className="checkout__item" key={item.productId}>
+                <span className="checkout__item-name">
+                  {item.name}
+                  {item.quantity > 1 ? ` × ${item.quantity}` : ""}
+                </span>
+                <span className="checkout__item-price">
+                  ${Number(item.price * item.quantity).toFixed(2)}
+                </span>
+                <button className="checkout__item-remove" onClick={() => removeFromCart(item)} aria-label={`Remove ${item.name}`}>
                   ✕
                 </button>
               </li>
