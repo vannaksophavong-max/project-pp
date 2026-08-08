@@ -188,3 +188,30 @@
   font-size: 16px;
   margin-bottom: 20px !important;
 }
+
+.checkout__success-ref {
+  font-family: var(--font-mono);
+  font-size: 14px;
+}
+
+.checkout__success-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.checkout__btn--ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1.5px solid var(--border);
+}
+
+.checkout__btn--ghost:hover {
+  background: var(--surface-muted);
+}
+
+.checkout__btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

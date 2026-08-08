@@ -1,0 +1,93 @@
+.orders-panel__toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.orders-panel__count {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.orders-panel__message {
+  background: var(--brick-green-soft);
+  color: var(--brick-green);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.orders-panel__error {
+  background: var(--danger-soft);
+  color: var(--danger);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.orders-panel__ref {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+
+.orders-panel__name {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.orders-panel__sub {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.orders-panel__total {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.orders-panel__status {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border);
+  background: var(--surface-muted);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.orders-panel__status--pending {
+  background: var(--brick-yellow);
+  color: var(--ink);
+  border-color: transparent;
+}
+
+.orders-panel__status--completed {
+  background: var(--brick-green-soft);
+  color: var(--brick-green);
+  border-color: transparent;
+}
+
+.orders-panel__status--shipped {
+  background: var(--brick-blue);
+  color: white;
+  border-color: transparent;
+}
+
+.orders-panel__status--delivered {
+  background: var(--brick-green-soft);
+  color: var(--brick-green);
+  border-color: transparent;
+}
+
+.orders-panel__status--cancelled {
+  background: var(--danger-soft);
+  color: var(--danger);
+  border-color: transparent;
+}

@@ -1,19 +1,21 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
 import { useCart } from "../context/CartContext.jsx";
+import { createOrder } from "../api.js";
 import "./CheckoutPage.css";
 
 export default function CheckoutPage() {
   const { cart, removeFromCart, total, clearCart } = useCart();
+  const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({ name: "", phone: "", address: "" });
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(null);
 
-  // NOTE: the backend currently has no public "create order/payment" endpoint —
-  // POST /api/v1/admin/payments exists but requires an admin JWT, so regular
-  // customers can't record a payment yet. This confirms the order locally
-  // (same as before) until a public checkout endpoint is added server-side.
-  function handlePay(e) {
+  async function handlePay(e) {
     e.preventDefault();
     if (!form.name || !form.phone || !form.address) {
       setError("Please fill in all your details.");
@@ -24,8 +26,20 @@ export default function CheckoutPage() {
       return;
     }
     setError("");
-    setSuccess({ ...form, total });
-    clearCart();
+    setSubmitting(true);
+    try {
+      const data = await createOrder({
+        customer_name: form.name,
+        phone: form.phone,
+        address: form.address,
+      });
+      await clearCart();
+      setSuccess({ ...form, total, reference: data.order?.reference });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (success) {
@@ -33,10 +47,35 @@ export default function CheckoutPage() {
       <div className="checkout">
         <div className="checkout__card checkout__success">
           <div className="checkout__success-icon">✅</div>
-          <h2>Payment received</h2>
+          <h2>Order placed!</h2>
           <p>Thanks, {success.name} — we'll deliver to {success.address}.</p>
+          {success.reference && (
+            <p className="checkout__success-ref">
+              Order number: <strong>{success.reference}</strong>
+            </p>
+          )}
           <p className="checkout__success-total">Total paid: ${Number(success.total).toFixed(2)}</p>
-          <Link to="/" className="checkout__btn">Back to shop</Link>
+          <div className="checkout__success-actions">
+            <Link to="/orders" className="checkout__btn">View my orders</Link>
+            <Link to="/" className="checkout__btn checkout__btn--ghost">Back to shop</Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isLoggedIn) {
+    return (
+      <div className="checkout">
+        <div className="checkout__card">
+          <Link to="/" className="checkout__back">← Continue shopping</Link>
+          <h2 className="checkout__title">Log in to checkout</h2>
+          <p className="checkout__empty">
+            Please log in so your order can be saved to your account.
+          </p>
+          <button className="checkout__btn" type="button" onClick={() => navigate("/login")}>
+            Log in / Create account
+          </button>
         </div>
       </div>
     );
@@ -100,7 +139,9 @@ export default function CheckoutPage() {
 
           {error && <p className="checkout__error">{error}</p>}
 
-          <button className="checkout__btn" type="submit">Confirm payment</button>
+          <button className="checkout__btn" type="submit" disabled={submitting}>
+            {submitting ? "Placing order..." : "Confirm payment"}
+          </button>
         </form>
       </div>
     </div>

@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { useProducts } from "../context/ProductsContext.jsx";
 import { adminUploadImage } from "../api.js";
 import UsersPanel from "../components/UsersPanel.jsx";
+import OrdersPanel from "../components/OrdersPanel.jsx";
 import "./AdminPage.css";
 
 export default function AdminPage() {
@@ -216,6 +217,13 @@ function AdminDashboard({ username, logout }) {
           >
             👥 Users
           </button>
+          <button
+            type="button"
+            className={`admin__tab ${activeTab === "orders" ? "admin__tab--active" : ""}`}
+            onClick={() => setActiveTab("orders")}
+          >
+            📋 Orders
+          </button>
         </nav>
 
         {activeTab === "products" && (
@@ -293,6 +301,7 @@ function AdminDashboard({ username, logout }) {
         )}
 
         {activeTab === "users" && <UsersPanel />}
+        {activeTab === "orders" && <OrdersPanel />}
       </div>
 
       {modalOpen && (

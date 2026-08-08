@@ -81,6 +81,23 @@ export function clearCartItems() {
   return request("/cart", { method: "DELETE", auth: true });
 }
 
+// ---- Orders ----
+export function fetchMyOrders() {
+  return request("/orders", { auth: true });
+}
+
+export function createOrder(payload) {
+  return request("/orders/checkout", { method: "POST", body: payload, auth: true });
+}
+
+export function adminGetOrders() {
+  return request("/admin/orders?limit=100", { auth: true });
+}
+
+export function adminUpdateOrderStatus(id, status) {
+  return request(`/admin/orders/${id}/status`, { method: "PATCH", body: { status }, auth: true });
+}
+
 // ---- Products (admin) ----
 export function adminCreateProduct(payload) {
   return request("/admin/products", { method: "POST", body: payload, auth: true });

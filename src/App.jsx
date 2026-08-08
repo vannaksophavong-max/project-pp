@@ -6,11 +6,18 @@ import ShopPage from "./pages/ShopPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import CheckoutPage from "./pages/CheckoutPage.jsx";
 import AdminPage from "./pages/AdminPage.jsx";
+import OrdersPage from "./pages/OrdersPage.jsx";
 
 function RequireAdmin({ children }) {
   const { isLoggedIn, isAdmin } = useAuth();
   if (!isLoggedIn) return <Navigate to="/login" replace />;
   if (!isAdmin) return <Navigate to="/" replace />;
+  return children;
+}
+
+function RequireAuth({ children }) {
+  const { isLoggedIn } = useAuth();
+  if (!isLoggedIn) return <Navigate to="/login" replace />;
   return children;
 }
 
@@ -30,6 +37,14 @@ export default function App() {
                   <RequireAdmin>
                     <AdminPage />
                   </RequireAdmin>
+                }
+              />
+              <Route
+                path="/orders"
+                element={
+                  <RequireAuth>
+                    <OrdersPage />
+                  </RequireAuth>
                 }
               />
             </Routes>

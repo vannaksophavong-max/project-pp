@@ -41,6 +41,7 @@ export default function Navbar() {
         {isLoggedIn ? (
           <>
             {isAdmin && <Link to="/admin" className="navbar__pill">Admin</Link>}
+            <Link to="/orders" className="navbar__pill">My Orders</Link>
             <button className="navbar__pill navbar__pill--user" onClick={handleLogout}>
               {username} · Logout
             </button>
