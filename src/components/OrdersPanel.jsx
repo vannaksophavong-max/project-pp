@@ -79,6 +79,7 @@ export default function OrdersPanel() {
                 <th>Customer</th>
                 <th>Items</th>
                 <th>Total</th>
+                <th>Payment</th>
                 <th>Date</th>
                 <th>Status</th>
               </tr>
@@ -100,6 +101,12 @@ export default function OrdersPanel() {
                     ))}
                   </td>
                   <td className="orders-panel__total">${Number(order.total_amount).toFixed(2)}</td>
+                  <td>
+                    <div className={`orders-panel__pay orders-panel__pay--${order.payment_method || "cod"}`}>
+                      {order.payment_method === "qr" ? "Bakong QR" : "Cash"}
+                      {order.payment_status === "paid" ? " · paid" : " · unpaid"}
+                    </div>
+                  </td>
                   <td className="orders-panel__sub">
                     {order.created_at ? new Date(order.created_at).toLocaleDateString() : "—"}
                   </td>

@@ -51,6 +51,25 @@
   white-space: nowrap;
 }
 
+.orders-panel__pay {
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.orders-panel__pay--qr {
+  background: var(--brick-blue);
+  color: white;
+}
+
+.orders-panel__pay--cod {
+  background: var(--brick-yellow);
+  color: var(--ink);
+}
+
 .orders-panel__status {
   font-size: 12px;
   font-weight: 700;

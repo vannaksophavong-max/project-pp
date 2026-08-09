@@ -136,6 +136,68 @@
   border: 1px solid var(--border);
 }
 
+.checkout__qr-note {
+  margin-top: 10px;
+}
+
+.checkout__qr-confirm {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  text-align: left;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+.checkout__qr-confirm input {
+  margin-top: 2px;
+}
+
+.checkout__methods {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  margin: 2px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.checkout__methods legend {
+  padding: 0 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.checkout__method {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.checkout__method input {
+  margin-top: 2px;
+}
+
+.checkout__method strong {
+  display: block;
+  font-size: 13.5px;
+}
+
+.checkout__method small {
+  display: block;
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
 .checkout__error {
   color: var(--danger);
   background: var(--danger-soft);

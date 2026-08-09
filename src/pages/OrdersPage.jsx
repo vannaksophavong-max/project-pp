@@ -85,6 +85,11 @@ export default function OrdersPage() {
                   <div>
                     <div className="orders__reference">{order.reference}</div>
                     <div className="orders__date">{formatDate(order.created_at)}</div>
+                    <div className="orders__pay">
+                      {order.payment_method === "qr"
+                        ? `Paid via Bakong QR${order.payment_status === "paid" ? "" : " (unpaid)"}`
+                        : "Cash on delivery"}
+                    </div>
                   </div>
                   <span className={`orders__badge orders__badge--${order.status}`}>
                     {STATUS_LABELS[order.status] || order.status}
