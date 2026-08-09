@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import ProductCard from "../components/ProductCard.jsx";
@@ -10,8 +11,16 @@ export default function ShopPage() {
   const { addToCart } = useCart();
   const navigate = useNavigate();
 
-  const blocks = products.filter((p) => p.type === "block");
-  const blinds = products.filter((p) => p.type === "blind");
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState("all"); // "all" | "block" | "blind"
+
+  const matches = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return products.filter((p) => !q || (p.name || "").toLowerCase().includes(q));
+  }, [products, query]);
+
+  const blocks = matches.filter((p) => p.type === "block");
+  const blinds = matches.filter((p) => p.type === "blind");
 
   function handleAdd(product) {
     addToCart(product);
@@ -61,21 +70,52 @@ export default function ShopPage() {
           <p style={{ padding: "0 1rem", color: "crimson" }}>{error}</p>
         )}
 
-        <section className="shop__row">
-          <div className="shop__row-head">
-            <h3 className="shop__label" id="menu">Block Paradise</h3>
-            <span className="shop__count">{blocks.length} set{blocks.length === 1 ? "" : "s"}</span>
+        <div className="shop__toolbar">
+          <input
+            className="shop__search"
+            type="search"
+            placeholder="🔍 Search products..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            aria-label="Search products"
+          />
+          <div className="shop__filters">
+            {(["all", "block", "blind"]).map((f) => (
+              <button
+                key={f}
+                type="button"
+                className={`shop__filter ${filter === f ? "shop__filter--active" : ""}`}
+                onClick={() => setFilter(f)}
+              >
+                {f === "all" ? "All" : f === "block" ? "🌸 Block" : "🎁 Blind Box"}
+              </button>
+            ))}
           </div>
-          <ProductGrid items={blocks} onAdd={handleAdd} onBuy={handleBuy} empty="No block sets yet — check back soon." />
-        </section>
+        </div>
 
-        <section className="shop__row">
-          <div className="shop__row-head">
-            <h3 className="shop__label">Blind Box</h3>
-            <span className="shop__count">{blinds.length} box{blinds.length === 1 ? "" : "es"}</span>
-          </div>
-          <ProductGrid items={blinds} onAdd={handleAdd} onBuy={handleBuy} empty="No blind boxes yet — check back soon." />
-        </section>
+        {!loading && !error && matches.length === 0 && (
+          <p className="shop__empty">No products match "{query}".</p>
+        )}
+
+        {(filter === "all" || filter === "block") && (
+          <section className="shop__row">
+            <div className="shop__row-head">
+              <h3 className="shop__label" id="menu">Block Paradise</h3>
+              <span className="shop__count">{blocks.length} set{blocks.length === 1 ? "" : "s"}</span>
+            </div>
+            <ProductGrid items={blocks} onAdd={handleAdd} onBuy={handleBuy} empty="No block sets yet — check back soon." />
+          </section>
+        )}
+
+        {(filter === "all" || filter === "blind") && (
+          <section className="shop__row">
+            <div className="shop__row-head">
+              <h3 className="shop__label">Blind Box</h3>
+              <span className="shop__count">{blinds.length} box{blinds.length === 1 ? "" : "es"}</span>
+            </div>
+            <ProductGrid items={blinds} onAdd={handleAdd} onBuy={handleBuy} empty="No blind boxes yet — check back soon." />
+          </section>
+        )}
       </main>
     </div>
   );
