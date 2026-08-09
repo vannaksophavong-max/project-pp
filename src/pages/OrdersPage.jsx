@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { fetchMyOrders } from "../api.js";
@@ -12,6 +12,18 @@ const STATUS_LABELS = {
   cancelled: "Cancelled",
 };
 
+const TRACK_STEPS = [
+  { status: "pending", label: "Order placed" },
+  { status: "shipped", label: "Shipped" },
+  { status: "delivered", label: "Delivered" },
+];
+
+function stepIndex(status) {
+  if (status === "delivered") return 2;
+  if (status === "shipped" || status === "completed") return 1;
+  return 0;
+}
+
 function formatDate(iso) {
   try {
     return new Date(iso).toLocaleDateString(undefined, {
@@ -24,30 +36,59 @@ function formatDate(iso) {
   }
 }
 
+function OrderTrack({ status }) {
+  if (status === "cancelled") {
+    return <div className="orders__track orders__track--cancelled">Order cancelled</div>;
+  }
+
+  const current = stepIndex(status);
+
+  return (
+    <ol className="orders__track">
+      {TRACK_STEPS.map((step, i) => (
+        <li
+          key={step.status}
+          className={`orders__step ${i <= current ? "orders__step--done" : ""} ${i === current ? "orders__step--current" : ""}`}
+        >
+          <span className="orders__step-dot" />
+          <span className="orders__step-label">{step.label}</span>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 export default function OrdersPage() {
   const { isLoggedIn } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const loadOrders = useCallback(async () => {
+    const data = await fetchMyOrders();
+    setOrders(Array.isArray(data?.orders) ? data.orders : []);
+    setError("");
+  }, []);
+
   useEffect(() => {
     if (!isLoggedIn) return;
     let cancelled = false;
     setLoading(true);
-    fetchMyOrders()
-      .then((data) => {
-        if (!cancelled) setOrders(Array.isArray(data?.orders) ? data.orders : []);
-      })
+    loadOrders()
       .catch((err) => {
         if (!cancelled) setError(err.message);
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
       });
+    const id = setInterval(() => {
+      if (!cancelled) loadOrders().catch(() => {});
+    }, 10000);
     return () => {
       cancelled = true;
+      clearInterval(id);
     };
-  }, [isLoggedIn]);
+  }, [isLoggedIn, loadOrders]);
 
   if (!isLoggedIn) {
     return (
@@ -95,6 +136,8 @@ export default function OrdersPage() {
                     {STATUS_LABELS[order.status] || order.status}
                   </span>
                 </div>
+
+                <OrderTrack status={order.status} />
 
                 <ul className="orders__items">
                   {(order.order_items || []).map((item) => (
