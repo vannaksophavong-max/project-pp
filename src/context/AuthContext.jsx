@@ -26,7 +26,7 @@ export function AuthProvider({ children }) {
       localStorage.setItem("bp_user", JSON.stringify(data.user));
       setToken(data.token);
       setUser(data.user);
-      return { ok: true };
+      return { ok: true, user: data.user };
     } catch (err) {
       return { ok: false, message: err.message };
     }
@@ -39,7 +39,7 @@ export function AuthProvider({ children }) {
       localStorage.setItem("bp_user", JSON.stringify(data.user));
       setToken(data.token);
       setUser(data.user);
-      return { ok: true };
+      return { ok: true, user: data.user };
     } catch (err) {
       return { ok: false, message: err.message };
     }
@@ -52,7 +52,7 @@ export function AuthProvider({ children }) {
       localStorage.setItem("bp_user", JSON.stringify(data.user));
       setToken(data.token);
       setUser(data.user);
-      return { ok: true };
+      return { ok: true, user: data.user };
     } catch (err) {
       return { ok: false, message: err.message };
     }

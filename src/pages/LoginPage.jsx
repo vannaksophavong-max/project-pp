@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import "./LoginPage.css";
@@ -42,6 +42,19 @@ export default function LoginPage() {
   const googleBtnRef = useRef(null);
   const googleInitedRef = useRef(false);
 
+  const goAfterLogin = useCallback(
+    (result) => {
+      if (!result.ok) return false;
+      if (result.user?.is_admin) {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
+      return true;
+    },
+    [navigate]
+  );
+
   useEffect(() => {
     // ---- Google Identity Services ----
     const initGoogle = () => {
@@ -52,8 +65,7 @@ export default function LoginPage() {
           if (!response?.credential) return;
           setError("");
           const result = await loginWithGoogle(response.credential);
-          if (result.ok) navigate("/");
-          else setError(result.message);
+          if (!goAfterLogin(result)) setError(result.message);
         },
       });
       if (googleBtnRef.current && !googleInitedRef.current) {
@@ -93,15 +105,13 @@ export default function LoginPage() {
     return () => {
       // cleanup: nothing to tear down for the 3rd-party SDKs
     };
-  }, [loginWithGoogle, navigate]);
+  }, [loginWithGoogle, navigate, goAfterLogin]);
 
   async function handleLogin(e) {
     e.preventDefault();
     setError("");
     const result = await login(loginForm.email, loginForm.password);
-    if (result.ok) {
-      navigate("/");
-    } else {
+    if (!goAfterLogin(result)) {
       setError(result.message);
     }
   }
@@ -150,8 +160,7 @@ export default function LoginPage() {
         if (response.authResponse?.accessToken) {
           setError("");
           const result = await loginWithFacebook(response.authResponse.accessToken);
-          if (result.ok) navigate("/");
-          else setError(result.message);
+          if (!goAfterLogin(result)) setError(result.message);
         } else {
           setError("Facebook login was cancelled.");
         }
