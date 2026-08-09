@@ -405,6 +405,23 @@
   font-size: 11px;
 }
 
+.admin__stock {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.admin__stock--in {
+  background: rgba(23, 165, 103, 0.15);
+  color: #3FD08C;
+}
+
+.admin__stock--out {
+  background: rgba(244, 67, 54, 0.15);
+  color: #EF5350;
+}
+
 .admin__type--block {
   background: rgba(129, 199, 132, 0.15);
   color: #81C784;

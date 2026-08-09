@@ -85,7 +85,7 @@ function AdminLogin({ login }) {
   );
 }
 
-const emptyForm = { name: "", price: "", img: "", type: "block" };
+const emptyForm = { name: "", price: "", img: "", type: "block", stock: "" };
 
 function AdminDashboard({ username, logout }) {
   const { products, addOrUpdateProduct, removeProduct } = useProducts();
@@ -128,7 +128,7 @@ function AdminDashboard({ username, logout }) {
 
   function openEdit(p) {
     setEditId(p.id);
-    setForm({ name: p.name, price: p.price, img: p.img, type: p.type });
+    setForm({ name: p.name, price: p.price, img: p.img, type: p.type, stock: p.stock });
     setModalError("");
     setModalOpen(true);
   }
@@ -143,7 +143,12 @@ function AdminDashboard({ username, logout }) {
       setModalError("Please fill in all fields.");
       return;
     }
-    const result = await addOrUpdateProduct(editId, form);
+    const stockNum = parseInt(form.stock, 10);
+    if (Number.isNaN(stockNum) || stockNum < 0) {
+      setModalError("Stock must be a number, 0 or more.");
+      return;
+    }
+    const result = await addOrUpdateProduct(editId, { ...form, stock: stockNum });
     if (!result.ok) {
       setModalError(result.message);
       return;
@@ -261,13 +266,14 @@ function AdminDashboard({ username, logout }) {
                     <th>Image</th>
                     <th>Name</th>
                     <th>Price</th>
+                    <th>Stock</th>
                     <th>Type</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filtered.length === 0 ? (
-                    <tr><td colSpan={6} className="admin__empty-row">😔 No products found</td></tr>
+                    <tr><td colSpan={7} className="admin__empty-row">😔 No products found</td></tr>
                   ) : (
                     filtered.map((p, i) => (
                       <tr key={p.id}>
@@ -282,6 +288,11 @@ function AdminDashboard({ username, logout }) {
                         </td>
                         <td className="admin__name">{p.name}</td>
                         <td><span className="admin__price-tag">${p.price}</span></td>
+                        <td>
+                          <span className={`admin__stock admin__stock--${p.stock > 0 ? "in" : "out"}`}>
+                            {p.stock > 0 ? p.stock + " left" : "Out of stock"}
+                          </span>
+                        </td>
                         <td>
                           <span className={`admin__type admin__type--${p.type}`}>
                             {p.type === "block" ? "🌸 Block" : "🎁 Blind Box"}
@@ -316,7 +327,11 @@ function AdminDashboard({ username, logout }) {
             <div className="admin__modal-row">
               <div className="admin__form-group">
                 <label>Price</label>
-                <input type="number" step="0.01" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} />
+                <input type="number" step="0.01" min="0" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} />
+              </div>
+              <div className="admin__form-group">
+                <label>Stock</label>
+                <input type="number" min="0" step="1" value={form.stock} onChange={(e) => setForm({ ...form, stock: e.target.value })} placeholder="0" />
               </div>
               <div className="admin__form-group">
                 <label>Type</label>

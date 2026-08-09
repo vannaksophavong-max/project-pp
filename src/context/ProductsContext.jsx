@@ -16,6 +16,7 @@ function toUiProduct(p) {
     name: p.name,
     price: Number(p.price),
     img: p.image_url,
+    stock: Number(p.stock ?? 0),
     type: categoryToType(p.category),
   };
 }
@@ -42,13 +43,13 @@ export function ProductsProvider({ children }) {
     loadProducts();
   }, [loadProducts]);
 
-  const addOrUpdateProduct = useCallback(async (id, { name, price, img, type }) => {
+  const addOrUpdateProduct = useCallback(async (id, { name, price, img, type, stock }) => {
     const payload = {
       name,
       price: Number(price),
       image_url: img,
       category: typeToCategory(type),
-      stock: 0,
+      stock: Number(stock || 0),
       is_active: true,
     };
     try {
