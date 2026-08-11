@@ -12,7 +12,6 @@ export default function Navbar() {
   const { count } = useCart();
   const navigate = useNavigate();
 
-  const [query, setQuery] = useState("");
   const [lang, setLang] = useState(LANGUAGES[0]);
   const [userOpen, setUserOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
@@ -43,12 +42,6 @@ export default function Navbar() {
     navigate("/login");
   }
 
-  function handleSearch(e) {
-    e.preventDefault();
-    const q = query.trim();
-    navigate(q ? `/?q=${encodeURIComponent(q)}` : "/");
-  }
-
   function toggleUser() {
     setUserOpen((v) => !v);
     setLangOpen(false);
@@ -67,18 +60,6 @@ export default function Navbar() {
         </Link>
         <span className="navbar__welcome">Block Paradise</span>
       </div>
-
-      <form className="navbar__search" role="search" onSubmit={handleSearch}>
-        <Icon name="search" size={17} className="navbar__search-icon" />
-        <input
-          className="navbar__search-input"
-          type="search"
-          placeholder="Search products..."
-          aria-label="Search products"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-      </form>
 
       <nav className="navbar__actions">
         <Link to="/" className="navbar__link">Shop</Link>
