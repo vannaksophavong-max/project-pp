@@ -603,7 +603,7 @@
   letter-spacing: 0.05em;
 }
 
-.admin__form-group input, .admin__form-group select {
+.admin__form-group input, .admin__form-group select, .admin__form-group textarea {
   width: 100%;
   padding: 11px 14px;
   background: #241E38;
@@ -612,9 +612,16 @@
   color: white;
   font-size: 14px;
   outline: none;
+  font-family: inherit;
 }
 
-.admin__form-group input:focus, .admin__form-group select:focus {
+.admin__form-group textarea {
+  resize: vertical;
+  min-height: 72px;
+  line-height: 1.45;
+}
+
+.admin__form-group input:focus, .admin__form-group select:focus, .admin__form-group textarea:focus {
   border-color: var(--brick-yellow);
 }
 

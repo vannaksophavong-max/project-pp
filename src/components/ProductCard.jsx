@@ -20,6 +20,7 @@ export default function ProductCard({ product, onAdd, onBuy }) {
         {out && <span className="product-card__soldout">Out of stock</span>}
       </div>
       <h4 className="product-card__name">{product.name}</h4>
+      {product.description && <p className="product-card__desc">{product.description}</p>}
       <p className="product-card__price">${Number(product.price).toFixed(2)}</p>
       <div className="product-card__actions">
         <button

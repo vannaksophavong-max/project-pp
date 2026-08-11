@@ -86,7 +86,7 @@ function AdminLogin({ login }) {
   );
 }
 
-const emptyForm = { name: "", price: "", img: "", type: "block", stock: "" };
+const emptyForm = { name: "", description: "", price: "", img: "", type: "block", stock: "" };
 
 function AdminDashboard({ username, logout }) {
   const { products, addOrUpdateProduct, removeProduct } = useProducts();
@@ -129,7 +129,7 @@ function AdminDashboard({ username, logout }) {
 
   function openEdit(p) {
     setEditId(p.id);
-    setForm({ name: p.name, price: p.price, img: p.img, type: p.type, stock: p.stock });
+    setForm({ name: p.name, description: p.description || "", price: p.price, img: p.img, type: p.type, stock: p.stock });
     setModalError("");
     setModalOpen(true);
   }
@@ -341,6 +341,15 @@ function AdminDashboard({ username, logout }) {
             <div className="admin__form-group">
               <label>Name</label>
               <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+            </div>
+            <div className="admin__form-group">
+              <label>Description</label>
+              <textarea
+                rows="3"
+                value={form.description}
+                onChange={(e) => setForm({ ...form, description: e.target.value })}
+                placeholder="A short description shown on the shop page…"
+              />
             </div>
             <div className="admin__modal-row">
               <div className="admin__form-group">
