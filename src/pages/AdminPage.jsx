@@ -5,6 +5,7 @@ import { useProducts } from "../context/ProductsContext.jsx";
 import { adminUploadImage } from "../api.js";
 import UsersPanel from "../components/UsersPanel.jsx";
 import OrdersPanel from "../components/OrdersPanel.jsx";
+import Icon from "../components/Icon.jsx";
 import "./AdminPage.css";
 
 export default function AdminPage() {
@@ -18,7 +19,7 @@ export default function AdminPage() {
     return (
       <div className="admin-login">
         <div className="admin-login__box">
-          <div className="admin-login__icon">🚫</div>
+          <div className="admin-login__icon admin-login__icon--ban"><Icon name="ban" size={34} /></div>
           <h1 className="admin-login__title">Not authorized</h1>
           <p className="admin-login__sub">This account doesn't have admin access.</p>
           <button className="admin-login__hint" onClick={logout}>Log out</button>
@@ -48,7 +49,7 @@ function AdminLogin({ login }) {
   return (
     <div className="admin-login">
       <form className="admin-login__box" onSubmit={handleSubmit}>
-        <div className="admin-login__icon">🧱</div>
+        <div className="admin-login__icon admin-login__icon--brick"><Icon name="brick" size={34} /></div>
         <h1 className="admin-login__title">Admin login</h1>
         <p className="admin-login__sub">Block Paradise — Admin Panel</p>
 
@@ -198,8 +199,12 @@ function AdminDashboard({ username, logout }) {
           <span className="admin__badge">ADMIN</span>
         </div>
         <div className="admin__topbar-right">
-          <span className="admin__who">👤 {username}</span>
-          <Link to="/" className="admin__ghost-btn">🌐 View site</Link>
+          <span className="admin__who">
+            <Icon name="user" size={15} /> {username}
+          </span>
+          <Link to="/" className="admin__ghost-btn">
+            <Icon name="globe" size={15} /> View site
+          </Link>
           <button className="admin__ghost-btn admin__ghost-btn--danger" onClick={handleLogout}>
             Logout
           </button>
@@ -213,46 +218,49 @@ function AdminDashboard({ username, logout }) {
             className={`admin__tab ${activeTab === "products" ? "admin__tab--active" : ""}`}
             onClick={() => setActiveTab("products")}
           >
-            📦 Products
+            <Icon name="package" size={16} /> Products
           </button>
           <button
             type="button"
             className={`admin__tab ${activeTab === "users" ? "admin__tab--active" : ""}`}
             onClick={() => setActiveTab("users")}
           >
-            👥 Users
+            <Icon name="users" size={16} /> Users
           </button>
           <button
             type="button"
             className={`admin__tab ${activeTab === "orders" ? "admin__tab--active" : ""}`}
             onClick={() => setActiveTab("orders")}
           >
-            📋 Orders
+            <Icon name="clipboard" size={16} /> Orders
           </button>
         </nav>
 
         {activeTab === "products" && (
           <>
             <div className="admin__stats">
-              <StatCard icon="📦" label="Products total" value={stats.total} />
-              <StatCard icon="🌸" label="Block Paradise" value={stats.block} />
-              <StatCard icon="🎁" label="Blind box" value={stats.blind} />
-              <StatCard icon="👤" label="Logged in as" value={username} small />
+              <StatCard icon="package" tone="red" label="Products total" value={stats.total} />
+              <StatCard icon="brick" tone="green" label="Block Paradise" value={stats.block} />
+              <StatCard icon="gift" tone="blue" label="Blind box" value={stats.blind} />
+              <StatCard icon="user" tone="yellow" label="Logged in as" value={username} small />
             </div>
 
             <div className="admin__toolbar">
               <div className="admin__toolbar-left">
                 <h2 className="admin__section-label">Product list</h2>
-                <input
-                  className="admin__search"
-                  placeholder="🔍 Search product..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
+                <div className="admin__search-wrap">
+                  <Icon name="search" size={15} className="admin__search-icon" />
+                  <input
+                    className="admin__search"
+                    placeholder="Search product..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                </div>
                 <select className="admin__filter" value={filter} onChange={(e) => setFilter(e.target.value)}>
                   <option value="all">All types</option>
-                  <option value="block">🌸 Block</option>
-                  <option value="blind">🎁 Blind Box</option>
+                  <option value="block">Block</option>
+                  <option value="blind">Blind Box</option>
                 </select>
               </div>
               <button className="admin__add-btn" onClick={openAdd}>+ Add product</button>
@@ -273,7 +281,9 @@ function AdminDashboard({ username, logout }) {
                 </thead>
                 <tbody>
                   {filtered.length === 0 ? (
-                    <tr><td colSpan={7} className="admin__empty-row">😔 No products found</td></tr>
+                    <tr><td colSpan={7} className="admin__empty-row">
+                      <Icon name="package" size={22} /> No products found
+                    </td></tr>
                   ) : (
                     filtered.map((p, i) => (
                       <tr key={p.id}>
@@ -295,7 +305,7 @@ function AdminDashboard({ username, logout }) {
                         </td>
                         <td>
                           <span className={`admin__type admin__type--${p.type}`}>
-                            {p.type === "block" ? "🌸 Block" : "🎁 Blind Box"}
+                            {p.type === "block" ? "Block" : "Blind Box"}
                           </span>
                         </td>
                         <td>
@@ -318,7 +328,15 @@ function AdminDashboard({ username, logout }) {
       {modalOpen && (
         <div className="admin__modal-overlay" onClick={(e) => e.target === e.currentTarget && closeModal()}>
           <form className="admin__modal" onSubmit={handleSave}>
-            <h3 className="admin__modal-title">{editId ? "✏️ Edit product" : "+ Add product"}</h3>
+            <h3 className="admin__modal-title">
+              {editId ? (
+                <>
+                  <Icon name="pencil" size={17} /> Edit product
+                </>
+              ) : (
+                "+ Add product"
+              )}
+            </h3>
 
             <div className="admin__form-group">
               <label>Name</label>
@@ -336,8 +354,8 @@ function AdminDashboard({ username, logout }) {
               <div className="admin__form-group">
                 <label>Type</label>
                 <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })}>
-                  <option value="block">🌸 Block</option>
-                  <option value="blind">🎁 Blind Box</option>
+                  <option value="block">Block</option>
+                  <option value="blind">Blind Box</option>
                 </select>
               </div>
             </div>
@@ -345,7 +363,13 @@ function AdminDashboard({ username, logout }) {
               <label>Image</label>
               <div className="admin__upload-row">
                 <label className="admin__upload-btn">
-                  {uploading ? "Uploading..." : "📤 Upload image"}
+                  {uploading ? (
+                    "Uploading..."
+                  ) : (
+                    <>
+                      <Icon name="upload" size={15} /> Upload image
+                    </>
+                  )}
                   <input
                     type="file"
                     accept="image/*"
@@ -375,7 +399,7 @@ function AdminDashboard({ username, logout }) {
             <div className="admin__modal-btns">
               <button type="button" className="admin__modal-cancel" onClick={closeModal}>Cancel</button>
               <button type="submit" className="admin__modal-save">
-                💾 Save
+                <Icon name="save" size={16} /> Save
               </button>
             </div>
           </form>
@@ -387,10 +411,12 @@ function AdminDashboard({ username, logout }) {
   );
 }
 
-function StatCard({ icon, label, value, small }) {
+function StatCard({ icon, tone, label, value, small }) {
   return (
     <div className="admin__stat-card">
-      <div className="admin__stat-icon">{icon}</div>
+      <div className={`admin__stat-icon admin__stat-icon--${tone}`}>
+        <Icon name={icon} size={24} />
+      </div>
       <div className="admin__stat-label">{label}</div>
       <div className={`admin__stat-value ${small ? "admin__stat-value--small" : ""}`}>{value}</div>
     </div>

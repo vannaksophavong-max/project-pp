@@ -229,8 +229,15 @@
 }
 
 .checkout__success-icon {
-  font-size: 40px;
-  margin-bottom: 8px;
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--brick-green-soft);
+  color: var(--brick-green);
+  border-radius: 50%;
 }
 
 .checkout__success h2 {

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { fetchMyOrders } from "../api.js";
+import Icon from "../components/Icon.jsx";
 import "./OrdersPage.css";
 
 const STATUS_LABELS = {
@@ -150,7 +151,9 @@ export default function OrdersPage() {
                           onError={(e) => { e.currentTarget.style.visibility = "hidden"; }}
                         />
                       ) : (
-                        <div className="orders__item-img orders__item-img--placeholder">🧱</div>
+                        <div className="orders__item-img orders__item-img--placeholder">
+                          <Icon name="brick" size={17} />
+                        </div>
                       )}
                       <span className="orders__item-name">
                         {item.product_name}

@@ -1,7 +1,8 @@
-import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import ProductCard from "../components/ProductCard.jsx";
+import Icon from "../components/Icon.jsx";
 import { useProducts } from "../context/ProductsContext.jsx";
 import { useCart } from "../context/CartContext.jsx";
 import "./ShopPage.css";
@@ -11,8 +12,13 @@ export default function ShopPage() {
   const { addToCart } = useCart();
   const navigate = useNavigate();
 
-  const [query, setQuery] = useState("");
+  const [searchParams] = useSearchParams();
+  const [query, setQuery] = useState(searchParams.get("q") || "");
   const [filter, setFilter] = useState("all"); // "all" | "block" | "blind"
+
+  useEffect(() => {
+    setQuery(searchParams.get("q") || "");
+  }, [searchParams]);
 
   const matches = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -71,14 +77,17 @@ export default function ShopPage() {
         )}
 
         <div className="shop__toolbar">
-          <input
-            className="shop__search"
-            type="search"
-            placeholder="🔍 Search products..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            aria-label="Search products"
-          />
+          <div className="shop__search-wrap">
+            <Icon name="search" size={17} className="shop__search-icon" />
+            <input
+              className="shop__search"
+              type="search"
+              placeholder="Search products..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              aria-label="Search products"
+            />
+          </div>
           <div className="shop__filters">
             {(["all", "block", "blind"]).map((f) => (
               <button
@@ -87,7 +96,14 @@ export default function ShopPage() {
                 className={`shop__filter ${filter === f ? "shop__filter--active" : ""}`}
                 onClick={() => setFilter(f)}
               >
-                {f === "all" ? "All" : f === "block" ? "🌸 Block" : "🎁 Blind Box"}
+                {f === "all" ? (
+                  "All"
+                ) : (
+                  <>
+                    <Icon name={f === "block" ? "brick" : "gift"} size={14} />
+                    {f === "block" ? "Block" : "Blind Box"}
+                  </>
+                )}
               </button>
             ))}
           </div>

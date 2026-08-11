@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useCart } from "../context/CartContext.jsx";
 import { createOrder } from "../api.js";
+import Icon from "../components/Icon.jsx";
 import "./CheckoutPage.css";
 
 export default function CheckoutPage() {
@@ -53,7 +54,9 @@ export default function CheckoutPage() {
     return (
       <div className="checkout">
         <div className="checkout__card checkout__success">
-          <div className="checkout__success-icon">✅</div>
+          <div className="checkout__success-icon">
+            <Icon name="checkCircle" size={40} />
+          </div>
           <h2>Order placed!</h2>
           <p>Thanks, {success.name} — we'll deliver to {success.address}.</p>
           {success.reference && (

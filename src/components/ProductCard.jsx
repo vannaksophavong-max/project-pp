@@ -1,3 +1,4 @@
+import Icon from "./Icon.jsx";
 import "./ProductCard.css";
 
 export default function ProductCard({ product, onAdd, onBuy }) {
@@ -12,7 +13,9 @@ export default function ProductCard({ product, onAdd, onBuy }) {
         {product.img ? (
           <img src={product.img} alt={product.name} onError={(e) => (e.currentTarget.style.opacity = 0)} />
         ) : (
-          <div className="product-card__placeholder">🧱</div>
+          <div className="product-card__placeholder">
+            <Icon name="brick" size={38} />
+          </div>
         )}
         {out && <span className="product-card__soldout">Out of stock</span>}
       </div>
