@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from "./context/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
 import { ProductsProvider } from "./context/ProductsContext.jsx";
 import ShopPage from "./pages/ShopPage.jsx";
+import ProductDetailPage from "./pages/ProductDetailPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import CheckoutPage from "./pages/CheckoutPage.jsx";
 import AdminPage from "./pages/AdminPage.jsx";
@@ -29,6 +30,7 @@ export default function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<ShopPage />} />
+              <Route path="/product/:id" element={<ProductDetailPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route
