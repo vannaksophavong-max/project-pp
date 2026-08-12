@@ -5,6 +5,7 @@ import { useProducts } from "../context/ProductsContext.jsx";
 import { adminUploadImage } from "../api.js";
 import UsersPanel from "../components/UsersPanel.jsx";
 import OrdersPanel from "../components/OrdersPanel.jsx";
+import DashboardPanel from "../components/DashboardPanel.jsx";
 import Icon from "../components/Icon.jsx";
 import "./AdminPage.css";
 
@@ -234,7 +235,16 @@ function AdminDashboard({ username, logout }) {
           >
             <Icon name="clipboard" size={16} /> Orders
           </button>
+          <button
+            type="button"
+            className={`admin__tab ${activeTab === "dashboard" ? "admin__tab--active" : ""}`}
+            onClick={() => setActiveTab("dashboard")}
+          >
+            <Icon name="chart" size={16} /> Dashboard
+          </button>
         </nav>
+
+        {activeTab === "dashboard" && <DashboardPanel />}
 
         {activeTab === "products" && (
           <>

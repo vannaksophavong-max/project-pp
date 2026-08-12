@@ -133,6 +133,33 @@ const PATHS = {
   check: (
     <path d="M20 6 9 17l-5-5" />
   ),
+  chart: (
+    <>
+      <path d="M3 3v18h18" />
+      <rect x="7" y="13" width="3" height="5" rx="0.6" />
+      <rect x="12" y="9" width="3" height="9" rx="0.6" />
+      <rect x="17" y="6" width="3" height="12" rx="0.6" />
+    </>
+  ),
+  trend: (
+    <>
+      <path d="M3 3v18h18" />
+      <path d="m7 14 4-4 3 3 5-6" />
+    </>
+  ),
+  coin: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v10" />
+      <path d="M15 9.5c-.6-.8-1.8-1.2-3-1.2-1.5 0-2.8.7-2.8 1.9 0 2.6 5.6 1.2 5.6 3.8 0 1.3-1.3 2-2.8 2-1.3 0-2.6-.5-3.2-1.4" />
+    </>
+  ),
+  clock: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3 3" />
+    </>
+  ),
 };
 
 export default function Icon({ name, size = 20, className = "", strokeWidth = 1.7 }) {

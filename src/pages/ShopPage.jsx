@@ -15,6 +15,9 @@ export default function ShopPage() {
   const [searchParams] = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("q") || "");
   const [filter, setFilter] = useState("all"); // "all" | "block" | "blind"
+  const [sort, setSort] = useState("featured"); // "featured" | "price-asc" | "price-desc" | "name"
+  const [priceMin, setPriceMin] = useState("");
+  const [priceMax, setPriceMax] = useState("");
 
   useEffect(() => {
     setQuery(searchParams.get("q") || "");
@@ -22,8 +25,22 @@ export default function ShopPage() {
 
   const matches = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return products.filter((p) => !q || (p.name || "").toLowerCase().includes(q));
-  }, [products, query]);
+    const min = priceMin === "" ? -Infinity : Number(priceMin);
+    const max = priceMax === "" ? Infinity : Number(priceMax);
+    const filtered = products.filter((p) => {
+      if (q && !(p.name || "").toLowerCase().includes(q)) return false;
+      const price = Number(p.price) || 0;
+      return price >= min && price <= max;
+    });
+    return sortProducts(filtered, sort);
+  }, [products, query, priceMin, priceMax, sort]);
+
+  const hasPriceFilter = priceMin !== "" || priceMax !== "";
+
+  function clearPrice() {
+    setPriceMin("");
+    setPriceMax("");
+  }
 
   const blocks = matches.filter((p) => p.type === "block");
   const blinds = matches.filter((p) => p.type === "blind");
@@ -109,8 +126,54 @@ export default function ShopPage() {
           </div>
         </div>
 
+        <div className="shop__controls">
+          <div className="shop__price-wrap">
+            <label className="shop__price">
+              <span className="shop__price-currency">$</span>
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="Min"
+                value={priceMin}
+                onChange={(e) => setPriceMin(e.target.value)}
+                aria-label="Minimum price"
+              />
+            </label>
+            <span className="shop__price-sep">–</span>
+            <label className="shop__price">
+              <span className="shop__price-currency">$</span>
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="Max"
+                value={priceMax}
+                onChange={(e) => setPriceMax(e.target.value)}
+                aria-label="Maximum price"
+              />
+            </label>
+            {hasPriceFilter && (
+              <button type="button" className="shop__clear-price" onClick={clearPrice}>
+                Clear
+              </button>
+            )}
+          </div>
+          <select
+            className="shop__sort"
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+            aria-label="Sort products"
+          >
+            <option value="featured">Sort: Featured</option>
+            <option value="price-asc">Price: Low → High</option>
+            <option value="price-desc">Price: High → Low</option>
+            <option value="name">Name: A → Z</option>
+          </select>
+        </div>
+
         {!loading && !error && matches.length === 0 && (
-          <p className="shop__empty">No products match "{query}".</p>
+          <p className="shop__empty">No products match your search.</p>
         )}
 
         {(filter === "all" || filter === "block") && (
@@ -135,6 +198,20 @@ export default function ShopPage() {
       </main>
     </div>
   );
+}
+
+function sortProducts(list, sort) {
+  const arr = [...list];
+  switch (sort) {
+    case "price-asc":
+      return arr.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
+    case "price-desc":
+      return arr.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
+    case "name":
+      return arr.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+    default:
+      return arr;
+  }
 }
 
 function ProductGrid({ items, onAdd, onBuy, empty }) {
