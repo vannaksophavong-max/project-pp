@@ -27,7 +27,7 @@ export default function DashboardPanel() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [range, setRange] = useState("30"); // "7" | "30" | "all"
+  const [range, setRange] = useState("all"); // "7" | "30" | "all"
 
   async function loadOrders() {
     setLoading(true);
