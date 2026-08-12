@@ -1,3 +1,5 @@
+const APP_VERSION = __APP_VERSION__;
+
 import { useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -200,6 +202,7 @@ function AdminDashboard({ username, logout }) {
           <span className="admin__badge">ADMIN</span>
         </div>
         <div className="admin__topbar-right">
+          <span className="admin__badge" title="Build version">{APP_VERSION}</span>
           <span className="admin__who">
             <Icon name="user" size={15} /> {username}
           </span>
