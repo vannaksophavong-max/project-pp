@@ -198,11 +198,11 @@ export default function DashboardPanel() {
               <div className="dash__status">
                 {STATUSES.map((s) => (
                   <div className="dash__status-row" key={s}>
-                    <span className="dash__status-label">
+                    <span className={`dash__status-label dash__status-label--${STATUS_TONES[s]}`}>
                       <span className={`dash__dot dash__dot--${STATUS_TONES[s]}`} />
                       {STATUS_LABELS[s]}
                     </span>
-                    <span className="dash__status-count">{stats.byStatus[s]}</span>
+                    <span className={`dash__status-count dash__status-count--${STATUS_TONES[s]}`}>{stats.byStatus[s]}</span>
                   </div>
                 ))}
               </div>
@@ -217,7 +217,7 @@ export default function DashboardPanel() {
               <div className="dash__top">
                 {stats.topProducts.map((p, i) => (
                   <div className="dash__top-row" key={p.name}>
-                    <span className="dash__top-rank">{i + 1}</span>
+                    <span className={`dash__top-rank dash__top-rank--${["gold", "silver", "bronze"][i] || "rest"}`}>{i + 1}</span>
                     <span className="dash__top-name">{p.name}</span>
                     <span className="dash__top-qty">{p.qty} sold</span>
                     <span className="dash__top-rev">${p.revenue.toFixed(2)}</span>
