@@ -41,6 +41,7 @@ export default function LoginPage() {
 
   const googleBtnRef = useRef(null);
   const googleInitedRef = useRef(false);
+  const googleObserverRef = useRef(null);
 
   const goAfterLogin = useCallback(
     (result) => {
@@ -59,6 +60,19 @@ export default function LoginPage() {
     // ---- Google Identity Services ----
     const initGoogle = () => {
       if (!GOOGLE_CLIENT_ID || !window.google?.accounts?.id) return;
+
+      const render = () => {
+        const el = googleBtnRef.current;
+        if (!el) return;
+        window.google.accounts.id.renderButton(el, {
+          theme: "outline",
+          size: "medium",
+          shape: "pill",
+          text: "continue_with",
+          width: Math.max(200, Math.floor(el.clientWidth)),
+        });
+      };
+
       window.google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
         callback: async (response) => {
@@ -68,14 +82,16 @@ export default function LoginPage() {
           if (!goAfterLogin(result)) setError(result.message);
         },
       });
+
       if (googleBtnRef.current && !googleInitedRef.current) {
         googleInitedRef.current = true;
-        window.google.accounts.id.renderButton(googleBtnRef.current, {
-          theme: "outline",
-          size: "medium",
-          shape: "pill",
-          text: "continue_with",
+        render();
+
+        googleObserverRef.current = new ResizeObserver(() => {
+          cancelAnimationFrame(googleObserverRef.current._raf);
+          googleObserverRef.current._raf = requestAnimationFrame(render);
         });
+        googleObserverRef.current.observe(googleBtnRef.current);
       }
     };
 
@@ -102,7 +118,8 @@ export default function LoginPage() {
     }
 
     return () => {
-      // cleanup: nothing to tear down for the 3rd-party SDKs
+      googleObserverRef.current?.disconnect();
+      googleObserverRef.current = null;
     };
   }, [loginWithGoogle, navigate, goAfterLogin]);
 
