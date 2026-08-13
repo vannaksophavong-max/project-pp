@@ -72,10 +72,9 @@ export default function LoginPage() {
         googleInitedRef.current = true;
         window.google.accounts.id.renderButton(googleBtnRef.current, {
           theme: "outline",
-          size: "large",
+          size: "medium",
           shape: "pill",
           text: "continue_with",
-          width: "100%",
         });
       }
     };
