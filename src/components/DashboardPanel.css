@@ -80,7 +80,13 @@
   font-weight: 700;
   font-size: 19px;
   line-height: 1;
+  color: var(--ink);
 }
+
+.dash__stat-value--green { color: var(--brick-green); }
+.dash__stat-value--blue { color: var(--brick-blue); }
+.dash__stat-value--yellow { color: var(--brick-yellow-dark); }
+.dash__stat-value--red { color: var(--danger); }
 
 .dash__grid {
   display: grid;
@@ -227,6 +233,7 @@
   font-weight: 700;
   font-size: 13px;
   white-space: nowrap;
+  color: var(--brick-green);
 }
 
 .dash__empty {

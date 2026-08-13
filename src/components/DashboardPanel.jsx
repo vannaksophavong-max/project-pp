@@ -142,7 +142,7 @@ export default function DashboardPanel() {
               </div>
               <div>
                 <div className="dash__stat-label">Revenue</div>
-                <div className="dash__stat-value">${stats.revenue.toFixed(2)}</div>
+                <div className="dash__stat-value dash__stat-value--green">${stats.revenue.toFixed(2)}</div>
               </div>
             </div>
             <div className="dash__stat">
@@ -151,7 +151,7 @@ export default function DashboardPanel() {
               </div>
               <div>
                 <div className="dash__stat-label">Orders</div>
-                <div className="dash__stat-value">{stats.total}</div>
+                <div className="dash__stat-value dash__stat-value--blue">{stats.total}</div>
               </div>
             </div>
             <div className="dash__stat">
@@ -160,7 +160,7 @@ export default function DashboardPanel() {
               </div>
               <div>
                 <div className="dash__stat-label">Avg. order value</div>
-                <div className="dash__stat-value">${avgOrder.toFixed(2)}</div>
+                <div className="dash__stat-value dash__stat-value--yellow">${avgOrder.toFixed(2)}</div>
               </div>
             </div>
             <div className="dash__stat">
@@ -169,7 +169,7 @@ export default function DashboardPanel() {
               </div>
               <div>
                 <div className="dash__stat-label">Pending</div>
-                <div className="dash__stat-value">{stats.byStatus.pending}</div>
+                <div className="dash__stat-value dash__stat-value--red">{stats.byStatus.pending}</div>
               </div>
             </div>
           </div>
