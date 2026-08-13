@@ -42,6 +42,7 @@ export default function LoginPage() {
   const googleBtnRef = useRef(null);
   const googleInitedRef = useRef(false);
   const googleObserverRef = useRef(null);
+  const googleRenderedWidthRef = useRef(0);
 
   const goAfterLogin = useCallback(
     (result) => {
@@ -64,12 +65,15 @@ export default function LoginPage() {
       const render = () => {
         const el = googleBtnRef.current;
         if (!el) return;
+        const width = Math.max(200, Math.floor(el.clientWidth));
+        if (width === googleRenderedWidthRef.current) return;
+        googleRenderedWidthRef.current = width;
         window.google.accounts.id.renderButton(el, {
           theme: "outline",
           size: "medium",
           shape: "pill",
           text: "continue_with",
-          width: Math.max(200, Math.floor(el.clientWidth)),
+          width,
         });
       };
 

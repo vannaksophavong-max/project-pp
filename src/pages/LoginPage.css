@@ -151,10 +151,6 @@
   width: 100%;
 }
 
-.auth__social-google iframe {
-  width: 100% !important;
-}
-
 .auth__social-btn {
   width: 100%;
   height: 44px;
