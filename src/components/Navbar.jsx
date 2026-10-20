@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useCart } from "../context/CartContext.jsx";
 import Icon from "./Icon.jsx";
@@ -9,8 +9,9 @@ const LANGUAGES = ["English", "ខ្មែរ (Khmer)"];
 
 export default function Navbar() {
   const { isLoggedIn, isAdmin, username, logout } = useAuth();
-  const { count } = useCart();
+  const { count, total } = useCart();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [lang, setLang] = useState(LANGUAGES[0]);
   const [userOpen, setUserOpen] = useState(false);
@@ -52,138 +53,218 @@ export default function Navbar() {
     setUserOpen(false);
   }
 
+  const isShopActive = location.pathname === "/" || location.pathname.startsWith("/product/");
+  const isOrdersActive = location.pathname === "/orders";
+
   return (
     <header className="navbar">
-      <div className="navbar__brand">
-        <Link to="/" className="navbar__logo" aria-label="Block Paradise home">
-          <img src="/images/logo.png" alt="" />
-        </Link>
-        <span className="navbar__welcome">Block Paradise</span>
-      </div>
-
-      <nav className="navbar__actions">
-        <Link to="/" className="navbar__link">Shop</Link>
-        <a
-          href="https://maps.app.goo.gl/x3zyUQthMNTmc6cx5"
-          target="_blank"
-          rel="noreferrer"
-          className="navbar__link"
-        >
-          Location
-        </a>
-
-        <div className="navbar__action" ref={langRef}>
-          <button
-            type="button"
-            className={`navbar__icon-btn${langOpen ? " navbar__icon-btn--open" : ""}`}
-            aria-label="Change language"
-            aria-haspopup="menu"
-            aria-expanded={langOpen}
-            onClick={toggleLang}
-          >
-            <Icon name="globe" size={20} />
-          </button>
-          {langOpen && (
-            <ul className="navbar__menu" role="menu" aria-label="Language">
-              {LANGUAGES.map((l) => (
-                <li key={l}>
-                  <button
-                    type="button"
-                    role="menuitem"
-                    className={`navbar__menu-item${l === lang ? " navbar__menu-item--active" : ""}`}
-                    onClick={() => { setLang(l); setLangOpen(false); }}
-                  >
-                    <span>{l}</span>
-                    {l === lang && <Icon name="check" size={14} />}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
+      <div className="navbar__inner">
+        <div className="navbar__brand">
+          <Link to="/" className="navbar__brand-link" aria-label="Block Paradise home">
+            <div className="navbar__logo">
+              <img src="/images/logo.png" alt="" />
+            </div>
+            <div className="navbar__brand-text">
+              <span className="navbar__welcome">Block Paradise</span>
+              <span className="navbar__tagline">Bricks & Blind Boxes</span>
+            </div>
+          </Link>
         </div>
 
-        <Link to="/checkout" className="navbar__icon-btn" aria-label="Shopping cart">
-          <Icon name="cart" size={20} />
-          {count > 0 && <span className="navbar__badge">{count > 99 ? "99+" : count}</span>}
-        </Link>
-
-        <div className="navbar__action" ref={userRef}>
-          <button
-            type="button"
-            className={`navbar__icon-btn${userOpen ? " navbar__icon-btn--open" : ""}`}
-            aria-label="Account"
-            aria-haspopup="menu"
-            aria-expanded={userOpen}
-            onClick={toggleUser}
+        <nav className="navbar__nav" aria-label="Primary">
+          <Link
+            to="/"
+            className={`navbar__link${isShopActive ? " navbar__link--active" : ""}`}
           >
-            <Icon name="user" size={20} />
-          </button>
-          {userOpen && (
-            <ul className="navbar__menu" role="menu" aria-label="Account menu">
-              {isLoggedIn ? (
-                <>
-                  <li className="navbar__menu-label">{username}</li>
-                  {isAdmin && (
+            <Icon name="brick" size={15} />
+            <span>Shop</span>
+          </Link>
+
+          {isLoggedIn && (
+            <Link
+              to="/orders"
+              className={`navbar__link${isOrdersActive ? " navbar__link--active" : ""}`}
+            >
+              <Icon name="clipboard" size={15} />
+              <span>My Orders</span>
+            </Link>
+          )}
+
+          <a
+            href="https://maps.app.goo.gl/x3zyUQthMNTmc6cx5"
+            target="_blank"
+            rel="noreferrer"
+            className="navbar__link"
+          >
+            <Icon name="mapPin" size={15} />
+            <span>Location</span>
+          </a>
+
+          {isAdmin && (
+            <Link to="/admin" className="navbar__link navbar__link--admin">
+              <Icon name="shield" size={14} />
+              <span>Admin</span>
+            </Link>
+          )}
+        </nav>
+
+        <div className="navbar__actions">
+          <div className="navbar__action" ref={langRef}>
+            <button
+              type="button"
+              className={`navbar__icon-btn${langOpen ? " navbar__icon-btn--open" : ""}`}
+              aria-label="Change language"
+              aria-haspopup="menu"
+              aria-expanded={langOpen}
+              onClick={toggleLang}
+              title="Language"
+            >
+              <Icon name="globe" size={19} />
+              <span className="navbar__lang-code">{lang.startsWith("English") ? "EN" : "KH"}</span>
+            </button>
+            {langOpen && (
+              <ul className="navbar__menu" role="menu" aria-label="Language">
+                <li className="navbar__menu-label">Select Language</li>
+                {LANGUAGES.map((l) => (
+                  <li key={l}>
+                    <button
+                      type="button"
+                      role="menuitem"
+                      className={`navbar__menu-item${l === lang ? " navbar__menu-item--active" : ""}`}
+                      onClick={() => { setLang(l); setLangOpen(false); }}
+                    >
+                      <span>{l}</span>
+                      {l === lang && <Icon name="check" size={15} />}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <Link
+            to="/checkout"
+            className={`navbar__cart-btn${count > 0 ? " navbar__cart-btn--has-items" : ""}`}
+            aria-label="Shopping cart"
+          >
+            <span className="navbar__cart-icon">
+              <Icon name="cart" size={19} />
+              {count > 0 && (
+                <span className="navbar__badge">{count > 99 ? "99+" : count}</span>
+              )}
+            </span>
+            <span className="navbar__cart-label">
+              {count > 0 ? `$${total.toFixed(2)}` : "Cart"}
+            </span>
+          </Link>
+
+          <div className="navbar__action" ref={userRef}>
+            <button
+              type="button"
+              className={`navbar__user-btn${userOpen ? " navbar__user-btn--open" : ""}`}
+              aria-label="Account"
+              aria-haspopup="menu"
+              aria-expanded={userOpen}
+              onClick={toggleUser}
+            >
+              {isLoggedIn && username ? (
+                <span className="navbar__avatar">
+                  {username.charAt(0).toUpperCase()}
+                </span>
+              ) : (
+                <Icon name="user" size={19} />
+              )}
+            </button>
+            {userOpen && (
+              <ul className="navbar__menu navbar__menu--user" role="menu" aria-label="Account menu">
+                {isLoggedIn ? (
+                  <>
+                    <li className="navbar__user-header">
+                      <span className="navbar__user-avatar-lg">
+                        {(username || "U").charAt(0).toUpperCase()}
+                      </span>
+                      <div className="navbar__user-meta">
+                        <span className="navbar__user-name">{username}</span>
+                        <span className="navbar__user-role">
+                          {isAdmin ? "Administrator" : "Member"}
+                        </span>
+                      </div>
+                    </li>
+                    <li className="navbar__menu-divider" />
+                    {isAdmin && (
+                      <li>
+                        <Link
+                          to="/admin"
+                          className="navbar__menu-item"
+                          role="menuitem"
+                          onClick={() => setUserOpen(false)}
+                        >
+                          <Icon name="shield" size={16} /> Admin Console
+                        </Link>
+                      </li>
+                    )}
                     <li>
                       <Link
-                        to="/admin"
+                        to="/orders"
                         className="navbar__menu-item"
                         role="menuitem"
                         onClick={() => setUserOpen(false)}
                       >
-                        <Icon name="shield" size={15} /> Admin
+                        <Icon name="clipboard" size={16} /> My Orders
                       </Link>
                     </li>
-                  )}
-                  <li>
-                    <Link
-                      to="/orders"
-                      className="navbar__menu-item"
-                      role="menuitem"
-                      onClick={() => setUserOpen(false)}
-                    >
-                      <Icon name="clipboard" size={15} /> My Orders
-                    </Link>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      role="menuitem"
-                      className="navbar__menu-item navbar__menu-item--danger"
-                      onClick={handleLogout}
-                    >
-                      <Icon name="logOut" size={15} /> Log out
-                    </button>
-                  </li>
-                </>
-              ) : (
-                <>
-                  <li>
-                    <Link
-                      to="/login"
-                      className="navbar__menu-item"
-                      role="menuitem"
-                      onClick={() => setUserOpen(false)}
-                    >
-                      <Icon name="logIn" size={15} /> Log in
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/login"
-                      className="navbar__menu-item"
-                      role="menuitem"
-                      onClick={() => setUserOpen(false)}
-                    >
-                      <Icon name="userPlus" size={15} /> Create account
-                    </Link>
-                  </li>
-                </>
-              )}
-            </ul>
-          )}
+                    <li>
+                      <Link
+                        to="/checkout"
+                        className="navbar__menu-item"
+                        role="menuitem"
+                        onClick={() => setUserOpen(false)}
+                      >
+                        <Icon name="cart" size={16} /> Shopping Cart
+                      </Link>
+                    </li>
+                    <li className="navbar__menu-divider" />
+                    <li>
+                      <button
+                        type="button"
+                        role="menuitem"
+                        className="navbar__menu-item navbar__menu-item--danger"
+                        onClick={handleLogout}
+                      >
+                        <Icon name="logOut" size={16} /> Log out
+                      </button>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li className="navbar__menu-label">Welcome to Block Paradise</li>
+                    <li>
+                      <Link
+                        to="/login"
+                        className="navbar__menu-item"
+                        role="menuitem"
+                        onClick={() => setUserOpen(false)}
+                      >
+                        <Icon name="logIn" size={16} /> Log in
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/login"
+                        className="navbar__menu-item"
+                        role="menuitem"
+                        onClick={() => setUserOpen(false)}
+                      >
+                        <Icon name="userPlus" size={16} /> Create account
+                      </Link>
+                    </li>
+                  </>
+                )}
+              </ul>
+            )}
+          </div>
         </div>
-      </nav>
+      </div>
     </header>
   );
 }

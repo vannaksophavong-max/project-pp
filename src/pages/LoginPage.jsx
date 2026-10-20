@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
+import Icon from "../components/Icon.jsx";
 import "./LoginPage.css";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -27,6 +28,7 @@ export default function LoginPage() {
     confirm: "",
   });
   const [error, setError] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
 
   const googleBtnRef = useRef(null);
   const googleInitedRef = useRef(false);
@@ -119,6 +121,7 @@ export default function LoginPage() {
   async function handleLogin(e) {
     e.preventDefault();
     setError("");
+    setSuccessMsg("");
     const result = await login(loginForm.email, loginForm.password);
     if (!goAfterLogin(result)) {
       setError(result.message);
@@ -128,6 +131,7 @@ export default function LoginPage() {
   async function handleRegister(e) {
     e.preventDefault();
     setError("");
+    setSuccessMsg("");
     if (registerForm.password !== registerForm.confirm) {
       setError("Passwords do not match.");
       return;
@@ -140,6 +144,7 @@ export default function LoginPage() {
     if (result.ok) {
       setMode("login");
       setLoginForm({ email: registerForm.email, password: "" });
+      setSuccessMsg("Account created! Please log in with your password.");
     } else {
       setError(result.message);
     }
@@ -181,127 +186,173 @@ export default function LoginPage() {
   return (
     <div className="auth">
       <div className="auth__panel">
-        <Link to="/" className="auth__brand">
-          <img src="/images/logo.png" alt="" />
-          <span>Block Paradise</span>
-        </Link>
+        <div className="auth__panel-inner">
+          <div className="auth__top-row">
+            <Link to="/" className="auth__brand">
+              <div className="auth__brand-logo">
+                <img src="/images/logo.png" alt="" />
+              </div>
+              <div>
+                <span className="auth__brand-name">Block Paradise</span>
+                <span className="auth__brand-sub">Bricks & Blind Boxes</span>
+              </div>
+            </Link>
+            <Link to="/" className="auth__back-pill">
+              <Icon name="arrowLeft" size={14} /> Shop
+            </Link>
+          </div>
 
-        <div className="auth__tabs">
-          <button
-            className={`auth__tab ${mode === "login" ? "auth__tab--active" : ""}`}
-            onClick={() => { setMode("login"); setError(""); }}
-          >
-            Log in
-          </button>
-          <button
-            className={`auth__tab ${mode === "register" ? "auth__tab--active" : ""}`}
-            onClick={() => { setMode("register"); setError(""); }}
-          >
-            Create account
-          </button>
-        </div>
+          <div className="auth__heading">
+            <h1>{mode === "login" ? "Welcome back" : "Create your account"}</h1>
+            <p>
+              {mode === "login"
+                ? "Sign in to manage your cart and track your orders."
+                : "Join Block Paradise for faster checkout and order tracking."}
+            </p>
+          </div>
 
-        {mode === "login" ? (
-          <form className="auth__form" onSubmit={handleLogin}>
-            <label className="auth__field">
-              <span>Email</span>
-              <input
-                type="email"
-                required
-                value={loginForm.email}
-                onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
-                placeholder="you@example.com"
-              />
-            </label>
-            <label className="auth__field">
-              <span>Password</span>
-              <input
-                type="password"
-                required
-                value={loginForm.password}
-                onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
-                placeholder="••••••••"
-              />
-            </label>
-            {error && <p className="auth__error">{error}</p>}
-            <button className="auth__submit" type="submit">
+          <div className="auth__tabs" role="tablist">
+            <button
+              type="button"
+              className={`auth__tab ${mode === "login" ? "auth__tab--active" : ""}`}
+              onClick={() => { setMode("login"); setError(""); setSuccessMsg(""); }}
+            >
               Log in
             </button>
-          </form>
-        ) : (
-          <form className="auth__form" onSubmit={handleRegister}>
-            <label className="auth__field">
-              <span>Full name</span>
-              <input
-                type="text"
-                required
-                value={registerForm.name}
-                onChange={(e) => setRegisterForm({ ...registerForm, name: e.target.value })}
-                placeholder="Jane Doe"
-              />
-            </label>
-            <label className="auth__field">
-              <span>Email</span>
-              <input
-                type="email"
-                required
-                value={registerForm.email}
-                onChange={(e) => setRegisterForm({ ...registerForm, email: e.target.value })}
-                placeholder="you@example.com"
-              />
-            </label>
-            <label className="auth__field">
-              <span>Password</span>
-              <input
-                type="password"
-                required
-                value={registerForm.password}
-                onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })}
-                placeholder="••••••••"
-              />
-            </label>
-            <label className="auth__field">
-              <span>Confirm password</span>
-              <input
-                type="password"
-                required
-                value={registerForm.confirm}
-                onChange={(e) => setRegisterForm({ ...registerForm, confirm: e.target.value })}
-                placeholder="••••••••"
-              />
-            </label>
-            {error && <p className="auth__error">{error}</p>}
-            <button className="auth__submit" type="submit">
+            <button
+              type="button"
+              className={`auth__tab ${mode === "register" ? "auth__tab--active" : ""}`}
+              onClick={() => { setMode("register"); setError(""); setSuccessMsg(""); }}
+            >
               Create account
             </button>
-          </form>
-        )}
+          </div>
 
-        <div className="auth__social">
-          <div className="auth__divider"><span>or continue with</span></div>
-          {GOOGLE_CLIENT_ID && (
-            <div
-              ref={googleBtnRef}
-              className="auth__social-google"
-              onClick={handleGoogleClick}
-            />
+          {successMsg && (
+            <p className="auth__success">
+              <Icon name="checkCircle" size={16} /> {successMsg}
+            </p>
           )}
-          <button
-            type="button"
-            className="auth__social-btn auth__social-btn--facebook"
-            onClick={handleFacebookClick}
-          >
-            <FacebookIcon /> Continue with Facebook
-          </button>
-        </div>
 
-        <Link to="/" className="auth__back">← Back to shop</Link>
+          {mode === "login" ? (
+            <form className="auth__form" onSubmit={handleLogin}>
+              <label className="auth__field">
+                <span>Email address</span>
+                <input
+                  type="email"
+                  required
+                  value={loginForm.email}
+                  onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
+                  placeholder="you@example.com"
+                />
+              </label>
+              <label className="auth__field">
+                <span>Password</span>
+                <input
+                  type="password"
+                  required
+                  value={loginForm.password}
+                  onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
+                  placeholder="••••••••"
+                />
+              </label>
+              {error && <p className="auth__error">{error}</p>}
+              <button className="auth__submit" type="submit">
+                Log in <Icon name="arrowRight" size={16} />
+              </button>
+            </form>
+          ) : (
+            <form className="auth__form" onSubmit={handleRegister}>
+              <label className="auth__field">
+                <span>Full name</span>
+                <input
+                  type="text"
+                  required
+                  value={registerForm.name}
+                  onChange={(e) => setRegisterForm({ ...registerForm, name: e.target.value })}
+                  placeholder="Jane Doe"
+                />
+              </label>
+              <label className="auth__field">
+                <span>Email address</span>
+                <input
+                  type="email"
+                  required
+                  value={registerForm.email}
+                  onChange={(e) => setRegisterForm({ ...registerForm, email: e.target.value })}
+                  placeholder="you@example.com"
+                />
+              </label>
+              <div className="auth__field-row">
+                <label className="auth__field">
+                  <span>Password</span>
+                  <input
+                    type="password"
+                    required
+                    value={registerForm.password}
+                    onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })}
+                    placeholder="Min. 8 chars"
+                  />
+                </label>
+                <label className="auth__field">
+                  <span>Confirm</span>
+                  <input
+                    type="password"
+                    required
+                    value={registerForm.confirm}
+                    onChange={(e) => setRegisterForm({ ...registerForm, confirm: e.target.value })}
+                    placeholder="Repeat password"
+                  />
+                </label>
+              </div>
+              {error && <p className="auth__error">{error}</p>}
+              <button className="auth__submit" type="submit">
+                Create account <Icon name="arrowRight" size={16} />
+              </button>
+            </form>
+          )}
+
+          <div className="auth__social">
+            <div className="auth__divider"><span>or continue with</span></div>
+            {GOOGLE_CLIENT_ID && (
+              <div
+                ref={googleBtnRef}
+                className="auth__social-google"
+                onClick={handleGoogleClick}
+              />
+            )}
+            <button
+              type="button"
+              className="auth__social-btn auth__social-btn--facebook"
+              onClick={handleFacebookClick}
+            >
+              <FacebookIcon /> Continue with Facebook
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className="auth__art" aria-hidden="true">
-        <div className="auth__brick auth__brick--red" />
-        <div className="auth__brick auth__brick--yellow" />
-        <div className="auth__brick auth__brick--blue" />
+        <div className="auth__art-content">
+          <div className="auth__brick auth__brick--red" />
+          <div className="auth__brick auth__brick--yellow" />
+          <div className="auth__brick auth__brick--blue" />
+
+          <div className="auth__showcase-card">
+            <span className="auth__showcase-badge">
+              <Icon name="sparkles" size={13} /> Collector's Club
+            </span>
+            <h2>Build, unbox & display your favorites.</h2>
+            <p>
+              Save items to your cart across devices, pay seamlessly with Bakong KHQR or Cash on Delivery, and follow every order in real time.
+            </p>
+            <div className="auth__showcase-pills">
+              <span><Icon name="brick" size={14} /> Block Sets</span>
+              <span><Icon name="gift" size={14} /> Mystery Blind Boxes</span>
+              <span><Icon name="truck" size={14} /> Fast Delivery</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

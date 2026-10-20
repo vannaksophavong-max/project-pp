@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar.jsx";
+import Footer from "../components/Footer.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { fetchMyOrders } from "../api.js";
 import Icon from "../components/Icon.jsx";
@@ -39,7 +41,11 @@ function formatDate(iso) {
 
 function OrderTrack({ status }) {
   if (status === "cancelled") {
-    return <div className="orders__track orders__track--cancelled">Order cancelled</div>;
+    return (
+      <div className="orders__track orders__track--cancelled">
+        <Icon name="ban" size={15} /> Order cancelled
+      </div>
+    );
   }
 
   const current = stepIndex(status);
@@ -51,7 +57,9 @@ function OrderTrack({ status }) {
           key={step.status}
           className={`orders__step ${i <= current ? "orders__step--done" : ""} ${i === current ? "orders__step--current" : ""}`}
         >
-          <span className="orders__step-dot" />
+          <span className="orders__step-dot">
+            {i <= current && <Icon name="check" size={11} strokeWidth={2.5} />}
+          </span>
           <span className="orders__step-label">{step.label}</span>
         </li>
       ))}
@@ -93,44 +101,79 @@ export default function OrdersPage() {
 
   if (!isLoggedIn) {
     return (
-      <div className="orders">
-        <div className="orders__card">
-          <h2 className="orders__title">My orders</h2>
-          <p className="orders__empty">Please log in to see your order history.</p>
-          <Link to="/login" className="orders__btn">Log in</Link>
-        </div>
+      <div className="orders-page">
+        <Navbar />
+        <main className="orders-page__main">
+          <div className="orders__empty-card">
+            <div className="orders__empty-icon">
+              <Icon name="user" size={32} />
+            </div>
+            <h2>My Orders</h2>
+            <p>Please log in to view your order history and live delivery status.</p>
+            <Link to="/login" className="orders__btn">
+              <Icon name="logIn" size={16} /> Log in
+            </Link>
+          </div>
+        </main>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="orders">
-      <div className="orders__card">
+    <div className="orders-page">
+      <Navbar />
+
+      <main className="orders-page__main">
         <div className="orders__head">
-          <h2 className="orders__title">My orders</h2>
-          <Link to="/" className="orders__back">← Back to shop</Link>
+          <div>
+            <Link to="/" className="orders__back">
+              <Icon name="arrowLeft" size={15} /> Back to shop
+            </Link>
+            <h1 className="orders__title">My Orders</h1>
+          </div>
+          {!loading && orders.length > 0 && (
+            <span className="orders__count-pill">
+              {orders.length} {orders.length === 1 ? "order" : "orders"}
+            </span>
+          )}
         </div>
 
         {loading ? (
-          <p className="orders__empty">Loading your orders...</p>
+          <div className="orders__skeleton-list">
+            <div className="orders__skeleton" />
+            <div className="orders__skeleton" />
+          </div>
         ) : error ? (
-          <p className="orders__error">{error}</p>
+          <div className="orders__error">
+            <Icon name="ban" size={16} /> {error}
+          </div>
         ) : orders.length === 0 ? (
-          <p className="orders__empty">
-            You haven't placed any orders yet. Go pick out a block set or blind box!
-          </p>
+          <div className="orders__empty-card">
+            <div className="orders__empty-icon">
+              <Icon name="clipboard" size={34} />
+            </div>
+            <h3>No orders yet</h3>
+            <p>You haven't placed any orders yet. Go pick out a block set or blind box!</p>
+            <Link to="/" className="orders__btn">
+              Explore Products <Icon name="arrowRight" size={16} />
+            </Link>
+          </div>
         ) : (
           <ul className="orders__list">
             {orders.map((order) => (
               <li className="orders__order" key={order.id}>
                 <div className="orders__order-head">
-                  <div>
-                    <div className="orders__reference">{order.reference}</div>
-                    <div className="orders__date">{formatDate(order.created_at)}</div>
+                  <div className="orders__order-meta">
+                    <div className="orders__ref-row">
+                      <span className="orders__reference">{order.reference}</span>
+                      <span className="orders__date">Placed on {formatDate(order.created_at)}</span>
+                    </div>
                     <div className="orders__pay">
+                      <Icon name="creditCard" size={13} />
                       {order.payment_method === "qr"
-                        ? `Paid via Bakong QR${order.payment_status === "paid" ? "" : " (unpaid)"}`
-                        : "Cash on delivery"}
+                        ? `Paid via Bakong QR${order.payment_status === "paid" ? "" : " (awaiting verification)"}`
+                        : "Cash on Delivery"}
                     </div>
                   </div>
                   <span className={`orders__badge orders__badge--${order.status}`}>
@@ -152,13 +195,15 @@ export default function OrdersPage() {
                         />
                       ) : (
                         <div className="orders__item-img orders__item-img--placeholder">
-                          <Icon name="brick" size={17} />
+                          <Icon name="brick" size={18} />
                         </div>
                       )}
-                      <span className="orders__item-name">
-                        {item.product_name}
-                        {item.quantity > 1 ? ` × ${item.quantity}` : ""}
-                      </span>
+                      <div className="orders__item-info">
+                        <span className="orders__item-name">{item.product_name}</span>
+                        <span className="orders__item-qty">
+                          Qty: {item.quantity} · ${Number(item.price).toFixed(2)} each
+                        </span>
+                      </div>
                       <span className="orders__item-price">
                         ${Number(item.price * item.quantity).toFixed(2)}
                       </span>
@@ -168,7 +213,8 @@ export default function OrdersPage() {
 
                 <div className="orders__order-foot">
                   <span className="orders__ship">
-                    Deliver to: {order.address}
+                    <Icon name="mapPin" size={15} />
+                    <span>Deliver to: <strong>{order.address}</strong></span>
                   </span>
                   <span className="orders__total">
                     Total <strong>${Number(order.total_amount).toFixed(2)}</strong>
@@ -178,7 +224,9 @@ export default function OrdersPage() {
             ))}
           </ul>
         )}
-      </div>
+      </main>
+
+      <Footer />
     </div>
   );
 }
