@@ -213,6 +213,21 @@ const PATHS = {
       <line x1="2" x2="22" y1="10" y2="10" />
     </>
   ),
+  refresh: (
+    <>
+      <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+      <path d="M21 3v5h-5" />
+      <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+      <path d="M8 16H3v5" />
+    </>
+  ),
+  alert: (
+    <>
+      <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+      <path d="M12 9v4" />
+      <path d="M12 17h.01" />
+    </>
+  ),
 };
 
 export default function Icon({ name, size = 20, className = "", strokeWidth = 1.7 }) {
